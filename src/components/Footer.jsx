@@ -7,7 +7,7 @@ const Footer = () => {
     <>
       <footer className='pt-16'>
         <div className="firstCol p-2 md:p-[3rem]">
-          <ul className='w-full lg:w-[50%] flex justify-between items-start'>
+          <ul className='w-full lg:w-[50%] flex justify-between items-start lg:pr-[4rem]'>
             <li className='order-1 md:order-1'>
               <h1 className='text-center md:text-start'>Trendings</h1>
               <ul className='subLink flex items-center flex-col md:block'>
@@ -29,7 +29,7 @@ const Footer = () => {
               </ul>
             </li>
             <li className='order-2 md:order-3'>
-              <h1 className='text-center md:text-start'>Customer Service</h1>
+              <h1 className='text-center md:text-start'>Services</h1>
               <ul className='subLink flex items-center flex-col md:block order-[2]'>
                 <li>Address</li>
                 <li>Returns</li>

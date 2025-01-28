@@ -1,6 +1,5 @@
 /* Footer Visibility */
 .footer {
-  background-color: #fecc32;
   transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
   transform: translateY(20%);
   opacity: 0;
