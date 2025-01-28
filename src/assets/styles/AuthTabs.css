@@ -1,0 +1,106 @@
+.card {
+  border-radius: 20px;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.data-\[state\=active\]\:shadow-sm[data-state="inactive"] {
+  background-color: transparent;
+}
+.data-\[state\=active\]\:shadow-sm[data-state="active"] {
+  background-color: transparent;
+  transform: scale(1.2);
+  box-shadow: none;
+  position: relative;
+}
+.data-\[state\=active\]\:shadow-sm[data-state="active"]::after {
+  content: "";
+  position: absolute;
+  background-color: var(--accent-color);
+  height: 2px;
+  bottom: 0;
+  animation: underline 0.2s ease-in-out forwards;
+}
+
+.formHeadText {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+input {
+  caret-color: var(--accent-color);
+  color: var(--text-color);
+}
+input:focus {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+#username {
+  text-transform: capitalize;
+}
+#email {
+  text-transform: lowercase;
+}
+
+.forgetBtn {
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+.forgetBtn:hover {
+  color: var(--accent-color);
+}
+
+.submitBtn {
+  background-color: var(--primary-color);
+  color: var(--accent-color);
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  border-radius: 20px;
+}
+.submitBtn:hover {
+  background-color: var(--accent-color);
+  color: var(--background-color);
+}
+
+@keyframes underline {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 60%;
+  }
+}
+/* OTP input */
+.input-otp {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input-otp input {
+  width: 2.5rem;
+  height: 2.5rem;
+  text-align: center;
+  border: 2px solid var(--accent-color);
+  border-right: 0px;
+}
+
+.input-otp input:focus {
+  border-color: var(--primary);
+  outline: none;
+  border: 2px solid var(--primary-color);
+}
+
+.input-otp input:first-child {
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.input-otp input:last-child {
+  border-radius: 0 0.375rem 0.375rem 0;
+  border-right: 2px solid var(--accent-color);
+}
+.input-otp input:last-child:focus {
+  border-right: 2px solid var(--primary-color);
+}
+
