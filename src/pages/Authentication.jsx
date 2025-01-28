@@ -28,7 +28,7 @@ const AuthPage = ({ onUserChange }) => {
         setIsLoading(true);
         setErrorMessage('');
         try {
-            const res = await axios.post('https://api.jewelsamarth.in/api/auth/register', formData, { withCredentials: true });
+            const res = await axios.post('https://api.yourbackend.com/api/auth/register', formData, { withCredentials: true });
             if (res.data.success) {
                 localStorage.setItem('username', res.data.user.username);
                 localStorage.setItem('email', res.data.user.email);
@@ -59,7 +59,7 @@ const AuthPage = ({ onUserChange }) => {
         setIsLoading(true);
         setErrorMessage('');
         try {
-            const res = await axios.post('https://api.jewelsamarth.in/api/auth/login', formData, { withCredentials: true });
+            const res = await axios.post('https://api.yourbackend.com/api/auth/login', formData, { withCredentials: true });
             if (res.data.success) {
                 localStorage.setItem('username', res.data.username);
                 localStorage.setItem('email', res.data.email);
