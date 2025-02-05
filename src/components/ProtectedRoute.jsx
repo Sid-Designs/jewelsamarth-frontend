@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, requiredRole }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -19,13 +19,19 @@ const ProtectedRoute = ({ children }) => {
                     "https://api.jewelsamarth.in/api/user/data",
                     {
                         withCredentials: true,
-                        headers: { "x-auth-token": token }, // Send token to backend
+                        headers: { "x-auth-token": token },
                     }
                 );
-                console.log(response.data.data.role)
 
                 if (!response.data.success) {
                     throw new Error(response.data.message);
+                }
+
+                const userRole = response.data.data.role; // Assuming backend returns role
+                console.log("User Role:", userRole);
+
+                if (requiredRole && userRole !== requiredRole) {
+                    throw new Error("Unauthorized");
                 }
 
                 setIsAuthorized(true);
@@ -37,7 +43,7 @@ const ProtectedRoute = ({ children }) => {
         };
 
         verifyUser();
-    }, []);
+    }, [requiredRole]);
 
     if (isLoading) {
         return <p>Loading...</p>;

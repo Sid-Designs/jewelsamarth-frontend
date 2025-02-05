@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import PageTransition from '@/components/PageTransition';
@@ -10,13 +10,39 @@ import Navbar from '@/components/Navbar';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import axios from 'axios';
 
 const App = () => {
     const location = useLocation();
-    const [user, setUser] = useState(false);
+    const [user, setUser] = useState(null);
 
-    const handleUserChange = (userState) => {
-        setUser(userState);
+    useEffect(() => {
+        const fetchUser = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+
+            try {
+                const response = await axios.get(
+                    "https://api.jewelsamarth.in/api/user/data",
+                    {
+                        withCredentials: true,
+                        headers: { "x-auth-token": token },
+                    }
+                );
+
+                if (response.data.success) {
+                    setUser(response.data.data); // Save user data (including role)
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
+    const handleUserChange = (userData) => {
+        setUser(userData);
     };
 
     const noNavbarFooterRoutes = ['/dashboard'];
@@ -24,7 +50,7 @@ const App = () => {
     return (
         <>
             {!noNavbarFooterRoutes.includes(location.pathname) && (
-                <Navbar loggedIn={user} onUserChange={handleUserChange} />
+                <Navbar loggedIn={!!user} onUserChange={handleUserChange} />
             )}
             <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
@@ -63,7 +89,7 @@ const App = () => {
                     <Route
                         path="/dashboard"
                         element={
-                            <ProtectedRoute role="user"> 
+                            <ProtectedRoute requiredRole="admin">
                                 <PageTransition>
                                     <Dashboard />
                                 </PageTransition>
