@@ -9,13 +9,15 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  optimizeDeps: {
-    include: ["jwt-decode"],
-  },
   build: {
     outDir: "dist",
   },
   server: {
-    historyApiFallback: true, // Ensures client-side routing works in development
+    historyApiFallback: true, // Ensures proper routing in development
+  },
+  preview: {
+    port: 5173,
+    strictPort: true,
+    historyApiFallback: true, // Ensures proper routing in production
   },
 });
