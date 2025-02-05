@@ -9,7 +9,7 @@ import EmailVerification from './pages/EmailVerification';
 import Navbar from '@/components/Navbar';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
-import ProtectedRoute from '@/components/ProtectedRoute'; // Import ProtectedRoute
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const App = () => {
     const location = useLocation();
@@ -60,7 +60,6 @@ const App = () => {
                             </PageTransition>
                         }
                     />
-                    {/* Protect Dashboard Route */}
                     <Route
                         path="/dashboard"
                         element={
