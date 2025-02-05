@@ -13,11 +13,11 @@ export default defineConfig({
     outDir: "dist",
   },
   server: {
-    historyApiFallback: true, // Ensures proper routing in development
+    historyApiFallback: true, // Fixes routing in development
   },
   preview: {
-    port: 5173,
+    port: 4173,
     strictPort: true,
-    historyApiFallback: true, // Ensures proper routing in production
+    historyApiFallback: true, // Fixes routing in production
   },
 });
