@@ -146,7 +146,11 @@ const Navbar = ({ loggedIn, onUserChange }) => {
                                     onMouseLeave={handleMouseLeave}
                                     className={`acntOpt ${acntOpt ? 'block' : 'hidden'}`}
                                 >
-                                    <li className='flex justify-start items-center gap-[10px]'><MdDashboard />Dashboard</li>
+                                    <li className='flex justify-start items-center gap-[10px]'>
+                                        <NavLink to="/dashboard">
+                                            <MdDashboard />Dashboard
+                                        </NavLink>
+                                    </li>
                                     {!auth && (
                                         <li onClick={handleEmail} className='flex justify-start items-center gap-[10px]'><MdMarkEmailRead />Verify Email</li>
                                     )}
