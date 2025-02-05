@@ -8,8 +8,8 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-    optimizeDeps: {
-      include: ["jwt-decode"],
-    },
+  },
+  optimizeDeps: {
+    include: ["jwt-decode"],  // Ensure optimizeDeps is correctly placed
   },
 });
