@@ -14,8 +14,8 @@ nav {
   outline: none;
   border: 1px solid var(--text-color);
   caret-color: var(--accent-color);
-  padding: 8px 10px;
-  padding-left: 10px;
+  padding: 8px 15px;
+  padding-left: 15px;
   border-radius: 20px;
   transition: all 0.2s ease-out;
   text-transform: capitalize;
@@ -51,6 +51,7 @@ nav {
 .acntDes {
   background-color: var(--primary-color);
   color: var(--accent-color);
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
 }
 .acntOpt {
   position: absolute;
@@ -219,10 +220,14 @@ nav {
   overflow: hidden;
   height: 0;
   opacity: 0;
+  border-radius: 20px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
 }
 
 .shopSubMenu {
   left: -200% !important;
+  border-radius: 20px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
 }
 
 .submenu ul {

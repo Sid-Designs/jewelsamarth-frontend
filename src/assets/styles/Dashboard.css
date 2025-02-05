@@ -1,0 +1,120 @@
+.bg-sidebar {
+  background-color: #f9f9f9;
+  color: var(--background-color);
+}
+.flex.min-h-0.flex-1.flex-col.gap-2.overflow-auto.group-data-\[collapsible\=icon\]\:overflow-hidden::-webkit-scrollbar{
+  display: none;
+}
+
+.sideHeader {
+  background-color: var(--accent-color);
+  border-radius: 10px;
+}
+.sideHeader:hover {
+  background-color: #060660;
+}
+.sidebarHeaderPar {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+/* User */
+.userBlock {
+  background-color:var(--accent-color);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.userBlock:hover {
+  background-color: #060660;
+}
+.userAvatar {
+  background-color: var(--primary-color);
+  border-radius: 10px;
+  color: var(--accent-color);
+}
+.userBox {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.userMenu {
+  background-color: var(--accent-color);
+  border-radius: 10px;
+  color: var(--background-color);
+  border: none;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+}
+.userItem {
+  border-radius: 5px;
+}
+.userItem:hover {
+  background-color: var(--primary-color);
+  cursor: pointer;
+}
+
+/*  */
+.bg-black\/80 {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.dashHeader {
+  background-color: #fefefe;
+  color: var(--accent-color);
+}
+.mobTogglePar {
+  border-right: 2px solid var(--primary-color);
+}
+.mobToggle {
+  background-color: var(--accent-color);
+  border-radius: 10px;
+  height: 100%;
+  animation: glowBack 2s linear infinite;
+}
+.dashItem li {
+  cursor: pointer;
+  transition: all 0.1 ease-out;
+}
+.dashItem li:hover {
+  background-color: #060660;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+
+@keyframes glowBack {
+  0% {
+    box-shadow: 0px 0px 0px black;
+  }
+  25% {
+    box-shadow: 2px 2px 10px #1a1a1a;
+  }
+  75% {
+    box-shadow: 2px 2px 10px #1a1a1a;
+  }
+  100% {
+    box-shadow: 0px 0px 0px black;
+  }
+}
+
+/*  */
+.arrowUp{
+  background-color: red;
+}
+
+.dashItem {
+  background-color: transparent;
+  color: var(--accent-color);
+  transition: background-color 0.2s, color 0.2s;
+}
+.dashItem:hover {
+  background-color: var(--primary-color); 
+}
+.activeDashItem {
+  background-color: var(--primary-color); 
+  color: var(--background-color); 
+}
+
+/* Chart */
+.recharts-tooltip-wrapper{
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+

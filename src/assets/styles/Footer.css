@@ -18,7 +18,8 @@ footer .firstCol {
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-  background-color: var(--primary-color);
+  /* background-color: rgba(0, 0, 0, 0.05); */
+  border-bottom: 1px solid var(--accent-color);
 }
 
 .firstCol ul li h1 {
@@ -36,7 +37,6 @@ footer .firstCol {
   position: relative;
   width: fit-content;
   transition: transform 0.3s ease-in-out;
-  margin-left: 0.5rem;
 }
 
 .firstCol .subLink li:hover {
@@ -60,11 +60,11 @@ footer .firstCol {
 
 /* Second Column Styles */
 footer .secCol {
-  background-color: var(--accent-color);
+  /* background-color: var(--accent-color); */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--background-color);
+  color: var(--accent-color);
   flex-wrap: wrap;
 }
 
@@ -73,17 +73,12 @@ footer .secCol {
   font-weight: 700;
   font-size: medium;
   gap: 1rem;
-  color: var(--background-color);
   display: flex;
 }
 
 .secCol .privacy li {
   cursor: pointer;
   transition: color 0.3s ease-in-out;
-}
-
-.secCol .privacy li:hover {
-  color: #fff;
 }
 
 .secCol .privacy li:nth-child(2) {
@@ -118,13 +113,15 @@ footer .secCol {
 
 .footForm form input {
   outline: none;
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1rem;
   caret-color: var(--accent-color);
   width: 100%;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.3s ease-in-out;
   margin-bottom: 1rem;
   text-transform: lowercase;
+  /* border: 1px solid var(--text-color); */
+  border-radius: 20px;
 }
 
 .footForm form input:focus {
@@ -138,10 +135,12 @@ footer .secCol {
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-in-out;
   width: 100%;
+  border-radius: 20px;
 }
 
 .footForm form button:hover {
   color: var(--background-color);
+  background-color: var(--primary-color);
   box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.4);
 }
 

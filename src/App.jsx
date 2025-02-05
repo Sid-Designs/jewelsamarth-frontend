@@ -8,6 +8,7 @@ import ResetPassword from './pages/ResetPassword';
 import EmailVerification from './pages/EmailVerification';
 import Navbar from '@/components/Navbar';
 import Footer from './components/Footer';
+import Dashboard from './pages/Dashboard';
 
 const App = () => {
     const location = useLocation();
@@ -17,9 +18,13 @@ const App = () => {
         setUser(userState);
     };
 
+    const noNavbarFooterRoutes = ['/dashboard'];
+
     return (
         <>
-            <Navbar loggedIn={user} onUserChange={handleUserChange} />
+            {!noNavbarFooterRoutes.includes(location.pathname) && (
+                <Navbar loggedIn={user} onUserChange={handleUserChange} />
+            )}
             <AnimatePresence exitBeforeEnter>
                 <Routes location={location} key={location.pathname}>
                     <Route
@@ -55,6 +60,14 @@ const App = () => {
                         }
                     />
                     <Route
+                        path="/dashboard"
+                        element={
+                            <PageTransition>
+                                <Dashboard />
+                            </PageTransition>
+                        }
+                    />
+                    <Route
                         path="*"
                         element={
                             <PageTransition>
@@ -64,7 +77,7 @@ const App = () => {
                     />
                 </Routes>
             </AnimatePresence>
-            <Footer />
+            {!noNavbarFooterRoutes.includes(location.pathname) && <Footer />}
         </>
     );
 };
