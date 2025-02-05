@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import PageTransition from '@/components/PageTransition';
@@ -14,11 +14,6 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 const App = () => {
     const location = useLocation();
     const [user, setUser] = useState(false);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        setUser(!!token); // Update user state if token exists
-    }, []);
 
     const handleUserChange = (userState) => {
         setUser(userState);
@@ -68,7 +63,7 @@ const App = () => {
                     <Route
                         path="/dashboard"
                         element={
-                            <ProtectedRoute> 
+                            <ProtectedRoute role="user"> 
                                 <PageTransition>
                                     <Dashboard />
                                 </PageTransition>
