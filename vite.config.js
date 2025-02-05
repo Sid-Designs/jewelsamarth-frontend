@@ -10,6 +10,12 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ["jwt-decode"],  // Ensure optimizeDeps is correctly placed
+    include: ["jwt-decode"],
+  },
+  build: {
+    outDir: "dist",
+  },
+  server: {
+    historyApiFallback: true, // Ensures client-side routing works in development
   },
 });
