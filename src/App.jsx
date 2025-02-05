@@ -12,7 +12,6 @@ import Dashboard from './pages/Dashboard';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import axios from 'axios';
 import CategoryPage from './pages/CategoryPage';
-import Categories from './pages/Categories';
 
 const App = () => {
     const location = useLocation();
