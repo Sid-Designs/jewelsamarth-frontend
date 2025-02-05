@@ -37,7 +37,7 @@ const ProtectedRoute = ({ children, role }) => {
         }
         const userId = decodedToken.id;
 
-        const response = await fetch(`/api/users/data`);
+        const response = await fetch(`https://api.jewelsamarth.in/api/user/data`);
         console.log(response.data)
         if (!response.ok) {
           throw new Error('User not found');
