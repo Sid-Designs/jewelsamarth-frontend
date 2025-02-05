@@ -22,7 +22,7 @@ const ProtectedRoute = ({ children }) => {
                         headers: { "x-auth-token": token }, // Send token to backend
                     }
                 );
-                console.log(response.data)
+                console.log(response.data.data.role)
 
                 if (!response.data.success) {
                     throw new Error(response.data.message);
