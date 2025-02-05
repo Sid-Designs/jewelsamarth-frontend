@@ -1,23 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import axios from 'axios';
-
-const decodeToken = (token) => {
-    if (!token) return null;
-
-    const base64Url = token.split('.')[1];
-    if (!base64Url) return null;
-
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-        atob(base64)
-            .split('')
-            .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-            .join('')
-    );
-
-    return JSON.parse(jsonPayload);
-};
+import jwtDecode from 'jwt-decode';
 
 const ProtectedRoute = ({ children, role }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -32,19 +16,22 @@ const ProtectedRoute = ({ children, role }) => {
             }
 
             try {
-                console.log(token)
-                const decodedToken = decodeToken(token);
-                if (!decodedToken) {
+                const decodedToken = jwtDecode(token);
+                if (!decodedToken || !decodedToken.id) {
                     throw new Error('Invalid token');
                 }
-                const userId = decodedToken.id;
 
-                const response = await axios.get(`https://api.jewelsamarth.in/api/user/data`, {
-                    withCredentials: true,
-                });
-                console.log(userId)
-                console.log(response)
-                const userData = response.data;
+                const response = await axios.post(
+                    'https://api.jewelsamarth.in/api/user/data',
+                    {},
+                    { withCredentials: true, headers: { 'x-auth-token': token } }
+                );
+
+                if (!response.data.success) {
+                    throw new Error(response.data.message);
+                }
+
+                const userData = response.data.data;
 
                 if (role && userData.role !== role) {
                     setIsLoading(false);
