@@ -38,7 +38,7 @@ const ProtectedRoute = ({ children, role }) => {
         }
         const userId = decodedToken.id;
 
-        const response = await axios.post('https://api.jewelsamarth.in/api/user/data', formData, { withCredentials: true });
+        const response = await axios.post('https://api.jewelsamarth.in/api/user/data', { withCredentials: true });
         console.log(response.data)
         if (!response.ok) {
           throw new Error('User not found');
