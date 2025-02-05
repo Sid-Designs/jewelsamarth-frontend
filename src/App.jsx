@@ -88,11 +88,6 @@ const App = () => {
                             </PageTransition>
                         }
                     />
-                    <Route path="/category"
-                        element={
-                            <PageTransition>
-                                <Categories />
-                            </PageTransition>}></Route>
                     <Route
                         path="/dashboard"
                         element={
@@ -103,7 +98,7 @@ const App = () => {
                             </ProtectedRoute>
                         }
                     />
-                    <Route path="/category/:categoryName" element={<CategoryPage />}></Route>
+                    <Route path="/category/:categoryName" element={<CategoryPage />}/>
                     <Route
                         path="*"
                         element={
