@@ -9,6 +9,7 @@ import EmailVerification from './pages/EmailVerification';
 import Navbar from '@/components/Navbar';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
+import ProtectedRoute from '@/components/ProtectedRoute'; // Import ProtectedRoute
 
 const App = () => {
     const location = useLocation();
@@ -25,7 +26,7 @@ const App = () => {
             {!noNavbarFooterRoutes.includes(location.pathname) && (
                 <Navbar loggedIn={user} onUserChange={handleUserChange} />
             )}
-            <AnimatePresence exitBeforeEnter>
+            <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
                     <Route
                         path="/"
@@ -59,12 +60,15 @@ const App = () => {
                             </PageTransition>
                         }
                     />
+                    {/* Protect Dashboard Route */}
                     <Route
                         path="/dashboard"
                         element={
-                            <PageTransition>
-                                <Dashboard />
-                            </PageTransition>
+                            <ProtectedRoute role="user"> 
+                                <PageTransition>
+                                    <Dashboard />
+                                </PageTransition>
+                            </ProtectedRoute>
                         }
                     />
                     <Route

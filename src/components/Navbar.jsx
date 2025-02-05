@@ -147,7 +147,7 @@ const Navbar = ({ loggedIn, onUserChange }) => {
                                     className={`acntOpt ${acntOpt ? 'block' : 'hidden'}`}
                                 >
                                     <li className='flex justify-start items-center gap-[10px]'>
-                                        <NavLink to="/dashboard">
+                                        <NavLink to="/dashboard" className='flex justify-start items-center gap-[10px]'>
                                             <MdDashboard />Dashboard
                                         </NavLink>
                                     </li>
