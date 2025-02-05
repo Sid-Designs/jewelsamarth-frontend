@@ -42,6 +42,7 @@ const ProtectedRoute = ({ children, role }) => {
                 const response = await axios.get(`https://api.jewelsamarth.in/api/user/data`, {
                     withCredentials: true,
                 });
+                console.log(userId)
                 console.log(response)
                 const userData = response.data;
 
