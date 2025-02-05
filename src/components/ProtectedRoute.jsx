@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
+import jwtDecode from 'jwt-decode'; // Correct import
 
 const ProtectedRoute = ({ children, role }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,16 +15,16 @@ const ProtectedRoute = ({ children, role }) => {
       }
 
       try {
-        const decodedToken = jwt_decode(token);
+        const decodedToken = jwtDecode(token); // Use jwtDecode function
         const userId = decodedToken.id;
-        
+
         const response = await fetch(`/api/users/${userId}`);
         if (!response.ok) {
           throw new Error('User not found');
         }
 
         const userData = await response.json();
-        
+
         if (role && userData.role !== role) {
           setIsLoading(false);
           return;
