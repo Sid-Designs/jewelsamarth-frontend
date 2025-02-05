@@ -11,6 +11,8 @@ import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import axios from 'axios';
+import CategoryPage from './pages/CategoryPage';
+import Categories from './pages/Categories';
 
 const App = () => {
     const location = useLocation();
@@ -86,6 +88,11 @@ const App = () => {
                             </PageTransition>
                         }
                     />
+                    <Route path="/category"
+                        element={
+                            <PageTransition>
+                                <Categories />
+                            </PageTransition>}></Route>
                     <Route
                         path="/dashboard"
                         element={
@@ -96,6 +103,7 @@ const App = () => {
                             </ProtectedRoute>
                         }
                     />
+                    <Route path="/category/:categoryName" element={<CategoryPage />}></Route>
                     <Route
                         path="*"
                         element={

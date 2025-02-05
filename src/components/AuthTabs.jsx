@@ -35,15 +35,15 @@ export function AuthTabs({ formData, setFormData, signUp, logIn, defaultActiveTa
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-2">
-                            <div className="space-y-1">
+                            <div className="space-y-1 authInput">
                                 <Label htmlFor="username">Username</Label>
                                 <Input id="username" value={formData.username} placeholder="Your username" onChange={handleChange} required />
                             </div>
-                            <div className="space-y-1">
+                            <div className="space-y-1 authInput">
                                 <Label htmlFor="email">Email</Label>
                                 <Input id="email" className= {`${(errorMessage == "User Already Exists") && 'border-red-500 text-red-500'}`} value={formData.email} type="email" placeholder="Your email address" onChange={handleChange} required />
                             </div>
-                            <div className="space-y-1">
+                            <div className="space-y-1 authInput">
                                 <Label htmlFor="password">Password</Label>
                                 <Input id="password" value={formData.password} type="password" placeholder="Your Password" onChange={handleChange} required />
                             </div>
@@ -67,11 +67,11 @@ export function AuthTabs({ formData, setFormData, signUp, logIn, defaultActiveTa
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-2">
-                            <div className="space-y-2">
+                            <div className="space-y-2 authInput">
                                 <Label htmlFor="email">Email</Label>
                                 <Input id="email" type="email" value={formData.email} placeholder="Your email address" onChange={handleChange} required />
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-2 authInput">
                                 <Label htmlFor="password">Password</Label>
                                 <Input id="password" className= {`${(errorMessage == "Invalid Credentials") && 'border-red-500 text-red-500'}`} type="password" value={formData.password} placeholder="Your Password" onChange={handleChange} required />
                             </div>
