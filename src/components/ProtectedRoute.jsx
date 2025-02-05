@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import axios from 'axios';
 
 const decodeToken = (token) => {
   if (!token) return null;
@@ -37,7 +38,7 @@ const ProtectedRoute = ({ children, role }) => {
         }
         const userId = decodedToken.id;
 
-        const response = await fetch(`https://api.jewelsamarth.in/api/user/data`);
+        const response = await axios.post('https://api.jewelsamarth.in/api/user/data', formData, { withCredentials: true });
         console.log(response.data)
         if (!response.ok) {
           throw new Error('User not found');
