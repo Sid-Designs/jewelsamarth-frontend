@@ -11,7 +11,11 @@ import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import axios from 'axios';
-import CategoryPage from './pages/CategoryPage';
+import CategoryPage from './pages/CollectionsPage';
+import SingleCollection from './components/SingleCollection';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import Payment from './pages/Payment';
 
 const App = () => {
     const location = useLocation();
@@ -97,7 +101,36 @@ const App = () => {
                             </ProtectedRoute>
                         }
                     />
-                    <Route path="/category/:categoryName" element={<CategoryPage />}/>
+                    <Route path="/collections/:collectionName" element={
+                        <PageTransition>
+                            <CategoryPage />
+                        </PageTransition>
+                    }
+                    />
+                    <Route path="/products/:id" element={
+                        <PageTransition>
+                            <SingleCollection />
+                        </PageTransition>
+                    }
+                    />
+                    <Route path="/cart" element={
+                        <PageTransition>
+                            <Cart />
+                        </PageTransition>
+                    }
+                    />
+                    <Route path="/checkout" element={
+                        <PageTransition>
+                            <Checkout />
+                        </PageTransition>
+                    }
+                    />
+                    <Route path="/payment" element={
+                        <PageTransition>
+                            <Payment />
+                        </PageTransition>
+                    }
+                    />
                     <Route
                         path="*"
                         element={

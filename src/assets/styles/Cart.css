@@ -1,0 +1,115 @@
+.cartTitle {
+  /* background-color: #f9f9f9; */
+  font-weight: 600;
+  font-size: x-large;
+}
+
+.shopCart {
+  height: 620px;
+  overflow-y: scroll;
+}
+.shopCart::-webkit-scrollbar {
+  display: none;
+}
+
+.cartImg {
+  height: 100px;
+  width: 150px;
+  border-radius: 20px;
+  background-color: #efefef;
+}
+
+.totalAmt {
+  border-top: 1px dashed gray;
+  border-bottom: 1px dashed gray;
+}
+
+.checkOut {
+  background-color: var(--accent-color);
+  color: var(--background-color);
+  border-radius: 20px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease-in-out;
+}
+
+.checkOut:hover {
+  box-shadow: 0;
+  background-color: var(--primary-color);
+}
+
+.checkForm div {
+  position: relative;
+}
+
+.checkForm div input {
+  height: 50px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+}
+
+.checkForm div textarea {
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+}
+
+.checkForm div input:focus ~ label,
+.checkForm div input:not(:placeholder-shown) ~ label,
+.checkForm div textarea:focus ~ label,
+.checkForm div textarea:not(:placeholder-shown) ~ label {
+  top: 0px;
+  left: 0;
+  font-size: 0.85rem;
+  background-color: transparent;
+  border-radius: 20px;
+  color: var(--accent-color);
+}
+
+.checkForm div label {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  transition: all 0.2s ease-in-out;
+  pointer-events: none;
+  color: #9ca3af;
+}
+
+.checkForm div textarea {
+  resize: none;
+  padding-top: 15px;
+  text-transform: capitalize;
+}
+.checkForm div textarea::-webkit-scrollbar{
+    display: none;
+}
+
+.checkForm div #addrLabel{
+    top: 25%;
+}
+
+.checkForm div textarea:focus ~ label,
+.checkForm div textarea:not(:placeholder-shown) ~ label{
+    top: 0!important;
+    font-size: 1rem;
+}
+
+.cupnBtn{
+  border: 2px solid var(--accent-color);
+  color: var(--accent-color);
+  font-weight: 700;
+  text-align: center;
+  padding: 5px 15px;
+  font-size: small;
+  text-transform: uppercase;
+  border-radius: 20px;
+  transition: all 0.2s ease-out;
+}
+
+.cupnBtn:hover{
+  background-color: var(--accent-color);
+  color: var(--background-color);
+}
+
+.boxShadow{
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+}

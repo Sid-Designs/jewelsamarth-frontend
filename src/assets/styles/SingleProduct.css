@@ -1,0 +1,74 @@
+.singleSubProdImg li {
+  background-color: #f1f1f1;
+  height: 80px;
+  width: 80px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.singleProdImg {
+  height: 650px;
+}
+
+.singleMainProdImg {
+  background-color: #f1f1f1;
+  border-radius: 20px;
+}
+
+.singleMainProdImg img {
+  object-fit: cover;
+  border-radius: 20px;
+  height: 100%;
+  width: 100%;
+}
+
+.singleProdPincode input {
+  border-radius: 20px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+  transition: all .2s ease-out;
+}
+
+.singleProdPincode input:focus{
+    box-shadow: none;
+}
+
+.singleProdPincode button{
+    background-color: var(--accent-color);
+    color: var(--background-color);
+    border-radius: 20px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+    transition: all .2s ease-out;
+}
+
+.singleProdPincode button:hover, .addToCartBtn:hover, .buyNowBtn:hover{
+    box-shadow: none;
+}
+
+.addToCartBtn{
+    background-color: var(--accent-color);
+    color: var(--background-color);
+    font-size: medium;
+    border-radius: 20px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all .2s ease-out;
+    /* border-radius: 20px 0px 0px 20px; */
+}
+
+.buyNowBtn{
+    background-color: var(--primary-color);
+    color: var(--accent-color);
+    font-size: medium;
+    border-radius: 20px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all .2s ease-out;
+    /* border-radius: 0px 20px 20px 0px; */
+  }
+  
+  .singleProdFeature{
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    user-select: none;
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.15);
+}

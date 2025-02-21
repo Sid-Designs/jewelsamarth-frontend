@@ -1,0 +1,31 @@
+.paymentOptUnSelected {
+    cursor: pointer;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease-out; 
+    border-radius: 20px;
+}
+.paymentOptUnSelected:hover {
+    background-color: var(--accent-color);
+    color: var(--background-color);
+    box-shadow: none;
+}
+
+.paymentOptSelected {
+    background-color: var(--primary-color);
+    color: var(--accent-color);
+    border-radius: 20px;
+}
+
+.paymentOpt div input[type="radio"] {
+    accent-color: var(--accent-color);
+}
+
+.paymentOpt div input[type="radio"]:active {
+    accent-color: var(--primary-color);
+}
+
+.paymentOpt div label {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-color);
+}

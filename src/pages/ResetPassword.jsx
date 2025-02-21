@@ -114,12 +114,12 @@ const ResetPassword = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="space-y-1">
+              <div className="space-y-1 authInput">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" type="email" value={email} placeholder="Your email address" onChange={handleEmailChange} required disabled={isOtpSent} />
               </div>
               {isOtpSent && !isOtpValid && (
-                <div className="space-y-1">
+                <div className="space-y-1 authInput">
                   <Label htmlFor="otp">OTP</Label>
                   <InputOTP value={otp} onChange={handleOtpChange} maxLength={6} className="input-otp">
                     <InputOTPGroup>
@@ -131,7 +131,7 @@ const ResetPassword = () => {
                 </div>
               )}
               {isOtpValid && (
-                <div className="space-y-1">
+                <div className="space-y-1 authInput">
                   <Label htmlFor="newPassword">New Password</Label>
                   <Input id="newPassword" type="password" value={newPassword} placeholder="Enter your new password" onChange={handlePasswordChange} required />
                 </div>
