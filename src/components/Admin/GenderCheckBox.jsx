@@ -20,6 +20,9 @@ const GenderCheckBox = () => {
 }
 
 const StyledWrapper = styled.div`
+  .container {
+    padding: 0px;
+  }
   .tabs {
     display: flex;
     position: relative;
