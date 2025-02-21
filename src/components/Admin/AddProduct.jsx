@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '@/assets/styles/AddProduct.css';
 import { Store, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import GenderCheckBox from '@/components/Admin/GenderCheckBox';
 import ImageUploadPopup from '@/components/Admin/ImageUploadPopup';
 import { Trash } from 'lucide-react';
-import jwtDecode from 'jwt-decode';
 
 const AddProduct = () => {
   const [productName, setProductName] = useState('');
@@ -17,46 +16,58 @@ const AddProduct = () => {
   const [isSizeDropdownOpen, setIsSizeDropdownOpen] = useState(false);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [mainImage, setMainImage] = useState('');
+  const [mainImage, setMainImage] = useState('/JewelSamarth_Single_Logo.png');
   const [subImages, setSubImages] = useState([]);
   const [uploadPosition, setUploadPosition] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decoded = jwtDecode(token);
-      setIsAdmin(decoded.role === 'admin');
-    }
-  }, []);
+  const handleSizeChange = (size) => {
+    setSelectedSize(size);
+    setIsSizeDropdownOpen(false);
+  };
 
-  const handleImageUpload = async (imageFile, position) => {
-    const formData = new FormData();
-    formData.append('file', imageFile);
-    formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_PRESET);
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    setIsCategoryDropdownOpen(false);
+  };
 
-    try {
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await response.json();
-      if (position === 'main') {
-        setMainImage(data.secure_url);
-      } else {
-        setSubImages([...subImages, data.secure_url]);
-      }
-    } catch (error) {
-      console.error('Error uploading image:', error);
+  const handleTagClick = (tag) => {
+    if (!selectedTags.includes(tag)) {
+      setSelectedTags([...selectedTags, tag]);
     }
   };
 
-  const handleAddProduct = async () => {
-    if (!isAdmin) {
-      alert('Only admins can add products.');
-      return;
-    }
+  const removeTag = (tag) => {
+    setSelectedTags(selectedTags.filter((t) => t !== tag));
+  };
 
+  const handleImageUpload = (imageUrls, position) => {
+    if (position === 'main') {
+      setMainImage(imageUrls[0]); // For main image, only the first image is selected
+    } else if (position === 'new') {
+      setSubImages([...subImages, ...imageUrls]); // For sub-images, add all selected images
+    } else if (typeof position === 'number') {
+      const updatedSubImages = [...subImages];
+      updatedSubImages[position] = imageUrls[0]; // Update the specific sub-image
+      setSubImages(updatedSubImages);
+    }
+  };
+
+  const handleDeleteImage = (position) => {
+    if (position === 'main') {
+      setMainImage('/JewelSamarth_Single_Logo.png'); // Set default image when main image is deleted
+      setIsPopupOpen(false); // Close the popup when main image is deleted
+    } else if (typeof position === 'number') {
+      const updatedSubImages = subImages.filter((_, index) => index !== position); // Remove sub-image at specific index
+      setSubImages(updatedSubImages);
+    }
+  };
+
+  const openImageUploadPopup = (position) => {
+    setUploadPosition(position);
+    setIsPopupOpen(true);
+  };
+
+  const handleAddProduct = () => {
     const productData = {
       name: productName,
       description: productDescription,
@@ -67,26 +78,27 @@ const AddProduct = () => {
       subImages,
       price: {
         regularPrice: document.getElementById('RegularPrice').value,
-        salePrice: document.getElementById('SalePrice').value,
+        salePrice: document.getElementById('SalePrice').value
       },
       stock: document.getElementById('Stock').value,
-      sku: document.getElementById('SKU').value,
+      sku: document.getElementById('SKU').value
     };
 
-    try {
-      const response = await fetch('/api/products/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(productData),
-      });
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.error('Error adding product:', error);
-    }
+    // Log all data in the console
+    console.log('Product Data:', productData);
+
+    // Send to the backend (you can replace this with an actual API call)
+    // Example:
+    // fetch('/api/products', {
+    //   method: 'POST',
+    //   body: JSON.stringify(productData),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then(response => response.json())
+    //   .then(data => console.log(data))
+    //   .catch(error => console.error('Error:', error));
   };
 
   return (
@@ -96,7 +108,7 @@ const AddProduct = () => {
           <Store />
           <span>Add New Product</span>
         </div>
-        {isAdmin && <div className="addProd py-2 px-4" onClick={handleAddProduct}>Add Product</div>}
+        <div className="addProd py-2 px-4" onClick={handleAddProduct}>Add Product</div>
       </div>
       <div className="prodDtl flex flex-col md:flex-row">
         <div className="prodInfo w-full md:w-[65%]">
@@ -125,14 +137,162 @@ const AddProduct = () => {
                 onChange={(e) => setProductDescription(e.target.value)}
               />
             </div>
+            <div className="formRow">
+              <div className="formGroup">
+                <label htmlFor="ProdSize">Size</label>
+                <div className="customSelect">
+                  <div
+                    className="selectTrigger w-[200px] flex justify-between items-center"
+                    onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
+                  >
+                    {selectedSize || 'Select Size'}
+                    {isSizeDropdownOpen ? <ChevronUp className="pr-2" /> : <ChevronDown className="pr-2" />}
+                  </div>
+                  {isSizeDropdownOpen && (
+                    <div className="selectDropdown">
+                      {[...Array(23)].map((_, i) => (
+                        <div
+                          key={i + 7}
+                          className="selectOption"
+                          onClick={() => handleSizeChange((i + 7).toString())}
+                        >
+                          {i + 7}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="formGroup">
+                <label htmlFor="ProdGender">Gender</label>
+                <GenderCheckBox />
+              </div>
+            </div>
           </form>
         </div>
         <div className="prodImg w-full md:w-[35%]">
           <div className="sectionTitle">Upload Image</div>
-          <input type="file" onChange={(e) => handleImageUpload(e.target.files[0], 'main')} />
-          {subImages.map((_, i) => (
-            <input key={i} type="file" onChange={(e) => handleImageUpload(e.target.files[0], 'sub')} />
-          ))}
+          <div className="imgSec">
+            <div className="imgCnt relative" onClick={() => openImageUploadPopup('main')}>
+              <img src={mainImage || 'default_image_url'} alt="Product" />
+              {mainImage !== '/JewelSamarth_Single_Logo.png' && (
+                <div className="delete-icon" onClick={() => handleDeleteImage('main')}>
+                  <Trash className="icon" />
+                </div>
+              )}
+            </div>
+            <div className="subImgCnt flex flex-wrap">
+              {subImages.map((image, i) => (
+                <div key={i} className="subImg" onClick={() => openImageUploadPopup(i)}>
+                  <img src={image} alt="Sub Product" />
+                  <div className="delete-icon" onClick={() => handleDeleteImage(i)}>
+                    <Trash className="icon" />
+                  </div>
+                </div>
+              ))}
+              <div className="subImg" onClick={() => openImageUploadPopup('new')}>
+                <Plus />
+              </div>
+            </div>
+          </div>
+          {isPopupOpen && (
+            <ImageUploadPopup
+              onClose={() => setIsPopupOpen(false)}
+              onUpload={handleImageUpload}
+              position={uploadPosition}
+            />
+          )}
+        </div>
+      </div>
+      <div className="prodDtl mt-4 flex flex-col md:flex-row">
+        <div className="prodInfo w-full md:w-[65%]">
+          <div className="sectionTitle">Pricing and Stock</div>
+          <form>
+            <div className="formRow">
+              <div className="formGroup">
+                <label htmlFor="RegularPrice">Regular Price</label>
+                <div className="priceInput">
+                  <span>₹</span>
+                  <input type="number" id="RegularPrice" min={0} placeholder="Enter regular price" className="pl-4" />
+                </div>
+              </div>
+              <div className="formGroup">
+                <label htmlFor="SalePrice">Sale Price</label>
+                <div className="priceInput">
+                  <span>₹</span>
+                  <input type="number" id="SalePrice" min={0} placeholder="Enter sale price" className="pl-4" />
+                </div>
+              </div>
+            </div>
+            <div className="formRow">
+              <div className="formGroup">
+                <label htmlFor="SKU">SKU</label>
+                <input type="text" id="SKU" placeholder="Enter SKU" className="pl-4" />
+              </div>
+              <div className="formGroup">
+                <label htmlFor="Stock">Stock</label>
+                <input type="number" id="Stock" min={1} placeholder="Enter stock" className="pl-4" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <div className="prodImg w-full md:w-[35%]">
+          <div className="sectionTitle">Category</div>
+          <div className="formGroup">
+            <label htmlFor="ProdCat">Product Category</label>
+            <div className="customSelect">
+              <div
+                className="selectTrigger flex justify-between items-center"
+                onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
+              >
+                {selectedCategory || 'Select Category'}
+                {isCategoryDropdownOpen ? <ChevronUp className="pr-2" /> : <ChevronDown className="pr-2" />}
+              </div>
+              {isCategoryDropdownOpen && (
+                <div className="selectDropdown selectCat">
+                  {['Silver', 'Pearl', 'Gemstone', 'Rudraksh'].map((category) => (
+                    <div
+                      key={category}
+                      className="selectOption"
+                      onClick={() => handleCategoryChange(category)}
+                    >
+                      {category}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="formGroup">
+            <label htmlFor="ProdTags">Product Tags</label>
+            <div className="tagsInputContainer">
+              <div className="tagsList">
+                {selectedTags.map((tag) => (
+                  <div key={tag} className="tagChip">
+                    {tag}
+                    <button onClick={() => removeTag(tag)}>×</button>
+                  </div>
+                ))}
+              </div>
+              <input
+                type="text"
+                placeholder="Add tags..."
+                onFocus={() => setIsTagDropdownOpen(true)}
+                onBlur={() => setTimeout(() => setIsTagDropdownOpen(false), 100)}
+              />
+              {isTagDropdownOpen && (
+                <div className="tagsDropdown">
+                  {availableTags
+                    .filter((tag) => !selectedTags.includes(tag))
+                    .map((tag) => (
+                      <div key={tag} className="tagOption" onMouseDown={() => handleTagClick(tag)}>
+                        {tag}
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
