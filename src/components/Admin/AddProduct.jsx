@@ -103,6 +103,7 @@ const AddProduct = () => {
       name: productName,
       description: productDescription,
       size: selectedSize,
+      gender: document.querySelector('input[name="gender"]:checked').value, // Capture gender value
       productCategory: selectedCategory,
       productTags: selectedTags,
       images: mainImage,
@@ -146,6 +147,7 @@ const AddProduct = () => {
       console.error('Error:', error);
     }
   };
+  
   return (
     <div className="newProdSec">
       <div className="navProd">
