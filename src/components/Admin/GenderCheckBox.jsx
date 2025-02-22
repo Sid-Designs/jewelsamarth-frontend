@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const GenderCheckBox = ({ selectedGender, handleGenderChange }) => {
@@ -13,9 +13,9 @@ const GenderCheckBox = ({ selectedGender, handleGenderChange }) => {
             value="Men"
             checked={selectedGender === 'Men'}
             onChange={handleGenderChange}
-            defaultChecked
           />
           <label className="tab" htmlFor="radio-1">Men</label>
+
           <input
             type="radio"
             id="radio-2"
@@ -25,6 +25,7 @@ const GenderCheckBox = ({ selectedGender, handleGenderChange }) => {
             onChange={handleGenderChange}
           />
           <label className="tab" htmlFor="radio-2">Women</label>
+
           <input
             type="radio"
             id="radio-3"
@@ -34,12 +35,13 @@ const GenderCheckBox = ({ selectedGender, handleGenderChange }) => {
             onChange={handleGenderChange}
           />
           <label className="tab" htmlFor="radio-3">Unisex</label>
+
           <span className="glider" />
         </div>
       </div>
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   .container {

@@ -5,6 +5,7 @@ import GenderCheckBox from '@/components/Admin/GenderCheckBox';
 import ImageUploadPopup from '@/components/Admin/ImageUploadPopup';
 import { Trash } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
+import SizeSelector from '../SizeSelector';
 
 const AddProduct = () => {
   const [productName, setProductName] = useState('');
@@ -21,13 +22,14 @@ const AddProduct = () => {
   const [subImages, setSubImages] = useState([]);
   const [uploadPosition, setUploadPosition] = useState(null);
   const [gender, setGender] = useState('Women');
+  const [size, setSize] = useState();
   const [load, setLoad] = useState(false);
 
-  const handleSizeChange = (size) => {
-    setSelectedSize(size);
-    setIsSizeDropdownOpen(false);
-  };
 
+  const handleSizeChange = (sizeRange) => {
+    setSize(sizeRange);
+    console.log("Selected Size Range:", sizeRange);
+  };
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setIsCategoryDropdownOpen(false);
@@ -108,7 +110,7 @@ const AddProduct = () => {
   };
 
   const handleAddProduct = async () => {
-    if(!productName || !productDescription || !selectedCategory || !selectedTags || !mainImage  ) {
+    if (!productName || !productDescription || !selectedCategory || !selectedTags || !mainImage) {
       toast.warn('Missing Details');
       return;
     }
@@ -198,35 +200,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="formRow">
-              <div className="formGroup">
-                <label htmlFor="ProdSize">Size</label>
-                <div className="customSelect">
-                  <div
-                    className="selectTrigger w-[200px] flex justify-between items-center"
-                    onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
-                  >
-                    {selectedSize || 'Select Size'}
-                    {isSizeDropdownOpen ? <ChevronUp className="pr-2" /> : <ChevronDown className="pr-2" />}
-                  </div>
-                  {isSizeDropdownOpen && (
-                    <div className="selectDropdown">
-                    <div className="selectOption" onClick={() => handleSizeChange("No Size")}>
-                      No Size
-                    </div>
-                    {[...Array(23)].map((_, i) => (
-                      <div
-                        key={i + 7}
-                        className="selectOption"
-                        onClick={() => handleSizeChange((i + 7).toString())}
-                      >
-                        {i + 7}
-                      </div>
-                    ))}
-                  </div>
-                  
-                  )}
-                </div>
-              </div>
+              <SizeSelector onSizeChange={handleSizeChange} />
               <div className="formGroup">
                 <label htmlFor="ProdGender">Gender</label>
                 <GenderCheckBox selectedGender={gender} handleGenderChange={handleGenderChange} />
@@ -376,19 +350,19 @@ const AddProduct = () => {
         </div>
       </div>
       <ToastContainer
-                stacked
-                position="bottom-right"
-                autoClose={3000}
-                limit={3}
-                hideProgressBar
-                newestOnTop
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
+        stacked
+        position="bottom-right"
+        autoClose={3000}
+        limit={3}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

@@ -126,7 +126,7 @@ textarea {
 
 .selectDropdown {
   position: absolute;
-  top: -440%;
+  top: 100%;
   left: 0;
   width: 100%;
   background-color: #fff;
