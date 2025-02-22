@@ -8,7 +8,6 @@ const ImageUploadPopup = ({ onClose, onUpload, position }) => {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    console.log(files);
     if (files.length > 0) {
       const updatedFileNames = files.map((file) => file.name);
       setFileNames(updatedFileNames);
@@ -16,7 +15,7 @@ const ImageUploadPopup = ({ onClose, onUpload, position }) => {
 
       // Generate image URLs for the files and upload
       const imageUrls = files.map((file) => URL.createObjectURL(file));
-      onUpload(imageUrls, position);
+      onUpload(imageUrls, position, files);
       onClose();
     }
   };

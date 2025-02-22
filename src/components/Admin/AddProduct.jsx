@@ -40,9 +40,9 @@ const AddProduct = () => {
     setSelectedTags(selectedTags.filter((t) => t !== tag));
   };
 
-  const handleImageUpload = (imageUrls, position) => {
+  const handleImageUpload = (imageUrls, position, files) => {
     console.log('Image URLs:', imageUrls);
-    console.log('File', file);
+    console.log('Files:', files);
     if (position === 'main') {
       setMainImage(imageUrls[0]); // For main image, only the first image is selected
     } else if (position === 'new') {
