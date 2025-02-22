@@ -98,7 +98,7 @@ const AddProduct = () => {
     setIsPopupOpen(true);
   };
 
-  const handleAddProduct = () => {
+  const handleAddProduct = async () => {
     const productData = {
       name: productName,
       description: productDescription,
@@ -117,18 +117,17 @@ const AddProduct = () => {
 
     console.log('Product Data:', productData);
 
-    // Send to the backend (you can replace this with an actual API call)
-    // Example:
-    // fetch('/api/products', {
-    //   method: 'POST',
-    //   body: JSON.stringify(productData),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then(response => response.json())
-    //   .then(data => console.log(data))
-    //   .catch(error => console.error('Error:', error));
+    // Send to the backend 
+    const res = await fetch('https://https://api.jewelsamarth.in/api/product/add', {
+      method: 'POST',
+      body: JSON.stringify(productData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
   };
 
   return (
