@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 const GenderCheckBox = ({ selectedGender, handleGenderChange }) => {
@@ -6,11 +6,33 @@ const GenderCheckBox = ({ selectedGender, handleGenderChange }) => {
     <StyledWrapper>
       <div className="container">
         <div className="tabs">
-          <input type="radio" id="radio-1" name="tabs" value="Men" onChange={handleGenderChange}/>
+          <input
+            type="radio"
+            id="radio-1"
+            name="tabs"
+            value="Men"
+            checked={selectedGender === 'Men'}
+            onChange={handleGenderChange}
+            defaultChecked
+          />
           <label className="tab" htmlFor="radio-1">Men</label>
-          <input type="radio" id="radio-2" name="tabs" value="Women" onChange={handleGenderChange}/>
-          <label className="tab" htmlFor="radio-2" defaultChecked>Women</label>
-          <input type="radio" id="radio-3" name="tabs" value="Unisex" onChange={handleGenderChange}/>
+          <input
+            type="radio"
+            id="radio-2"
+            name="tabs"
+            value="Women"
+            checked={selectedGender === 'Women'}
+            onChange={handleGenderChange}
+          />
+          <label className="tab" htmlFor="radio-2">Women</label>
+          <input
+            type="radio"
+            id="radio-3"
+            name="tabs"
+            value="Unisex"
+            checked={selectedGender === 'Unisex'}
+            onChange={handleGenderChange}
+          />
           <label className="tab" htmlFor="radio-3">Unisex</label>
           <span className="glider" />
         </div>
@@ -60,12 +82,6 @@ const StyledWrapper = styled.div`
     color: var(--background-color);
   }
 
-  .container input[type="radio"]:checked + label > .notification {
-    background-color: var(--accent-color);
-    color: #fff;
-    margin: 0px;
-  }
-
   .container input[id="radio-1"]:checked ~ .glider {
     transform: translateX(0);
   }
@@ -113,10 +129,10 @@ const StyledWrapper = styled.div`
       padding: 1rem; /* Adjusted padding for mobiles */
       padding-left: 25px;
       margin-left: -5px;
-      }
-      label.tab{
-        font-size: medium;
-        margin-right: 20px;
+    }
+    label.tab {
+      font-size: medium;
+      margin-right: 20px;
     }
     .tab {
       font-size: 0.8rem; /* Adjusted font size for mobiles */

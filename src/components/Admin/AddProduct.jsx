@@ -4,6 +4,7 @@ import { Store, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import GenderCheckBox from '@/components/Admin/GenderCheckBox';
 import ImageUploadPopup from '@/components/Admin/ImageUploadPopup';
 import { Trash } from 'lucide-react';
+import { ToastContainer, toast } from 'react-toastify';
 
 const AddProduct = () => {
   const [productName, setProductName] = useState('');
@@ -20,6 +21,7 @@ const AddProduct = () => {
   const [subImages, setSubImages] = useState([]);
   const [uploadPosition, setUploadPosition] = useState(null);
   const [gender, setGender] = useState('Women');
+  const [load, setLoad] = useState(false);
 
   const handleSizeChange = (size) => {
     setSelectedSize(size);
@@ -46,36 +48,38 @@ const AddProduct = () => {
   };
 
   const handleImageUpload = async (imageUrls, position, files) => {
+    setLoad(true);
     console.log('Image URLs:', imageUrls);
     console.log('Files:', files);
-  
+
     const uploadPromises = files.map(async (file) => {
       const data = new FormData();
       data.append('file', file);
-      data.append('upload_preset', 'JewelSamarthCloud'); 
+      data.append('upload_preset', 'JewelSamarthCloud');
       data.append('cloud_name', 'dplww7z06');
-  
+
       try {
         const res = await fetch('https://api.cloudinary.com/v1_1/dplww7z06/image/upload', {
           method: 'POST',
           body: data
         });
-  
+
         if (!res.ok) {
           throw new Error('Failed to upload image');
         }
-  
+
         const dataJson = await res.json();
         console.log(dataJson);
+        setLoad(false);
         return dataJson.secure_url;
       } catch (error) {
         console.error('Error uploading image:', error);
         return null;
       }
     });
-  
+
     const uploadedImageUrls = await Promise.all(uploadPromises);
-  
+
     if (position === 'main') {
       setMainImage(uploadedImageUrls[0]); // For main image, only the first image is selected
     } else if (position === 'new') {
@@ -86,7 +90,7 @@ const AddProduct = () => {
       setSubImages(updatedSubImages);
     }
   };
-  
+
 
   const handleDeleteImage = (position) => {
     if (position === 'main') {
@@ -104,6 +108,10 @@ const AddProduct = () => {
   };
 
   const handleAddProduct = async () => {
+    if(!productName || !productDescription || !selectedCategory || !selectedTags || !mainImage  ) {
+      toast.warn('Missing Details');
+      return;
+    }
     const productData = {
       name: productName,
       description: productDescription,
@@ -118,17 +126,17 @@ const AddProduct = () => {
       stock: document.getElementById('Stock').value,
       sku: document.getElementById('SKU').value
     };
-  
+
     console.log('Product Data:', productData);
-  
+
     // Get token from local storage
     const token = localStorage.getItem('token');
-  
+
     if (!token) {
       console.error('No token found');
       return;
     }
-  
+
     try {
       // Send product data to the backend
       const res = await fetch('https://api.jewelsamarth.in/api/product/add', {
@@ -139,20 +147,20 @@ const AddProduct = () => {
           'x-auth-token': token // Attach the token here
         },
       });
-  
+
       const data = await res.json();
-  
+
       if (data.success) {
-        console.log('Product Added Successfully:', data.message);
+        toast.success('Product Added Successfully:', data.message);
         // Optionally: Reset the form or update the UI to reflect the successful addition
       } else {
-        console.log('Error Adding Product:', data);
+        toast.error('Error Adding Product:', data);
       }
     } catch (error) {
       console.error('Error:', error);
     }
   };
-  
+
   return (
     <div className="newProdSec">
       <div className="navProd">
@@ -202,22 +210,26 @@ const AddProduct = () => {
                   </div>
                   {isSizeDropdownOpen && (
                     <div className="selectDropdown">
-                      {[...Array(23)].map((_, i) => (
-                        <div
-                          key={i + 7}
-                          className="selectOption"
-                          onClick={() => handleSizeChange((i + 7).toString())}
-                        >
-                          {i + 7}
-                        </div>
-                      ))}
+                    <div className="selectOption" onClick={() => handleSizeChange("No Size")}>
+                      No Size
                     </div>
+                    {[...Array(23)].map((_, i) => (
+                      <div
+                        key={i + 7}
+                        className="selectOption"
+                        onClick={() => handleSizeChange((i + 7).toString())}
+                      >
+                        {i + 7}
+                      </div>
+                    ))}
+                  </div>
+                  
                   )}
                 </div>
               </div>
               <div className="formGroup">
                 <label htmlFor="ProdGender">Gender</label>
-                <GenderCheckBox selectedGender={gender} handleGenderChange={handleGenderChange}/>
+                <GenderCheckBox selectedGender={gender} handleGenderChange={handleGenderChange} />
               </div>
             </div>
           </form>
@@ -226,12 +238,28 @@ const AddProduct = () => {
           <div className="sectionTitle">Upload Image</div>
           <div className="imgSec">
             <div className="imgCnt relative" onClick={() => openImageUploadPopup('main')}>
-              <img src={mainImage || 'default_image_url'} alt="Product" />
-              {mainImage !== '/JewelSamarth_Single_Logo.png' && (
-                <div className="delete-icon" onClick={() => handleDeleteImage('main')}>
-                  <Trash className="icon" />
-                </div>
-              )}
+              {load ?
+                <div className='flex justify-center items-center border h-full w-full'>
+                  <div className="w-full flex justify-center items-center gap-x-2">
+                    {[0, 1, 2].map((i) => (
+                      <div
+                        key={i}
+                        className="w-5 h-5 bg-[var(--primary-color)] rounded-full animate-bounce animate-pulse"
+                        style={{ animationDelay: `${i * 0.2}s` }}
+                      ></div>
+                    ))}
+                  </div>
+                </div> :
+                <>
+                  <img src={mainImage || 'default_image_url'} alt="Product" />
+                  {mainImage !== '/JewelSamarth_Single_Logo.png' && (
+                    <div className="delete-icon" onClick={() => handleDeleteImage('main')}>
+                      <Trash className="icon" />
+                    </div>
+                  )}
+                </>
+              }
+
             </div>
             <div className="subImgCnt flex flex-wrap">
               {subImages.map((image, i) => (
@@ -347,6 +375,20 @@ const AddProduct = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+                stacked
+                position="bottom-right"
+                autoClose={3000}
+                limit={3}
+                hideProgressBar
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
     </div>
   );
 };

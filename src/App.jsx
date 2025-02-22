@@ -94,11 +94,14 @@ const App = () => {
                     <Route
                         path="/dashboard"
                         element={
-                            <ProtectedRoute requiredRole="admin">
-                                <PageTransition>
-                                    <Dashboard />
-                                </PageTransition>
-                            </ProtectedRoute>
+                            // <ProtectedRoute requiredRole="admin">
+                            //     <PageTransition>
+                            //         <Dashboard />
+                            //     </PageTransition>
+                            // </ProtectedRoute>
+                            <PageTransition>
+                                <Dashboard />
+                            </PageTransition>
                         }
                     />
                     <Route path="/collections/:collectionName" element={

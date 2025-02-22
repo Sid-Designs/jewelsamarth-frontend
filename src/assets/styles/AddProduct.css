@@ -138,6 +138,9 @@ textarea {
   max-width: 200px;
   overflow-y: auto;
 }
+.selectDropdown::-webkit-scrollbar {
+  display: none;
+}
 .selectCat {
   max-width: 100%;
 }
@@ -510,3 +513,4 @@ textarea {
   top: 5px;
   right: 5px;
 }
+
