@@ -40,9 +40,19 @@ const AddProduct = () => {
     setSelectedTags(selectedTags.filter((t) => t !== tag));
   };
 
-  const handleImageUpload = (imageUrls, position, files) => {
+  const handleImageUpload = async (imageUrls, position, files) => {
     console.log('Image URLs:', imageUrls);
     console.log('Files:', files);
+    const data = new FormData();
+    data.append("file", files);
+    data.append("upload_preset", "JewelSamarthCloud");
+    data.append("cloud_name", "dplww7z06");
+    const res = await fetch("https://api.cloudinary.com/v1_1/dplww7z06/image/upload", {
+      method: "post",
+      body: data
+    });
+    const dataJson = await res.json();
+    console.log(dataJson);
     if (position === 'main') {
       setMainImage(imageUrls[0]); // For main image, only the first image is selected
     } else if (position === 'new') {
