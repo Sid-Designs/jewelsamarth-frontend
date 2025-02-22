@@ -42,6 +42,7 @@ const AddProduct = () => {
 
   const handleImageUpload = (imageUrls, position) => {
     console.log('Image URLs:', imageUrls);
+    console.log('File', file);
     if (position === 'main') {
       setMainImage(imageUrls[0]); // For main image, only the first image is selected
     } else if (position === 'new') {
@@ -116,22 +117,22 @@ const AddProduct = () => {
           <form>
             <div className="formGroup">
               <label htmlFor="ProdTitle">Name Product</label>
-              <input 
-                type="text" 
-                id="ProdTitle" 
-                placeholder="Enter product name" 
+              <input
+                type="text"
+                id="ProdTitle"
+                placeholder="Enter product name"
                 className="pl-4"
-                value={productName} 
+                value={productName}
                 onChange={(e) => setProductName(e.target.value)}
               />
             </div>
             <div className="formGroup">
               <label htmlFor="ProdDesc">Description Product</label>
-              <textarea 
-                id="ProdDesc" 
-                rows={7} 
-                spellCheck="false" 
-                placeholder="Enter product description" 
+              <textarea
+                id="ProdDesc"
+                rows={7}
+                spellCheck="false"
+                placeholder="Enter product description"
                 className="pl-4"
                 value={productDescription}
                 onChange={(e) => setProductDescription(e.target.value)}
