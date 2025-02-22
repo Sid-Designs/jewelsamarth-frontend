@@ -75,7 +75,7 @@ const AddProduct = () => {
     const uploadPromises = images.map(image => {
       const formData = new FormData();
       formData.append('file', image);
-      formData.append('upload_preset', 'your_upload_preset'); // Replace with your upload preset
+      formData.append('upload_preset', 'JewelSamarthCloud'); // Replace with your upload preset
 
       return fetch(`https://api.cloudinary.com/v1_1/${cld.config.cloud.cloudName}/image/upload`, {
         method: 'POST',
