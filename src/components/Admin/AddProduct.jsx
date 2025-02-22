@@ -118,11 +118,19 @@ const AddProduct = () => {
     console.log('Product Data:', productData);
 
     // Send to the backend 
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.error('No token found');
+      return;
+    }
+    
     const res = await fetch('https://api.jewelsamarth.in/api/product/add', {
       method: 'POST',
       body: JSON.stringify(productData),
       headers: {
         'Content-Type': 'application/json',
+        'x-auth-token': token
       },
     })
       .then(response => response.json())
