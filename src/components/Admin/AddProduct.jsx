@@ -112,30 +112,40 @@ const AddProduct = () => {
       stock: document.getElementById('Stock').value,
       sku: document.getElementById('SKU').value
     };
-
+  
     console.log('Product Data:', productData);
-
-    // Send to the backend 
+  
+    // Get token from local storage
     const token = localStorage.getItem('token');
-
+  
     if (!token) {
       console.error('No token found');
       return;
     }
-
-    const res = await fetch('https://api.jewelsamarth.in/api/product/add', {
-      method: 'POST',
-      body: JSON.stringify(productData),
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': token
-      },
-    })
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error('Error:', error));
+  
+    try {
+      // Send product data to the backend
+      const res = await fetch('https://api.jewelsamarth.in/api/product/add', {
+        method: 'POST',
+        body: JSON.stringify(productData),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token // Attach the token here
+        },
+      });
+  
+      const data = await res.json();
+  
+      if (data.success) {
+        console.log('Product Added Successfully:', data.message);
+        // Optionally: Reset the form or update the UI to reflect the successful addition
+      } else {
+        console.error('Error Adding Product:', data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
-
   return (
     <div className="newProdSec">
       <div className="navProd">
