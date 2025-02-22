@@ -103,14 +103,12 @@ const AddProduct = () => {
       name: productName,
       description: productDescription,
       size: selectedSize,
-      category: selectedCategory,
-      tags: selectedTags,
-      mainImage,
-      subImages,
-      price: {
-        regularPrice: document.getElementById('RegularPrice').value,
-        salePrice: document.getElementById('SalePrice').value
-      },
+      productCategory: selectedCategory,
+      productTags: selectedTags,
+      images: mainImage,
+      subImages: subImages,
+      regprice: document.getElementById('RegularPrice').value,
+      saleprice: document.getElementById('SalePrice').value,
       stock: document.getElementById('Stock').value,
       sku: document.getElementById('SKU').value
     };
@@ -124,7 +122,7 @@ const AddProduct = () => {
       console.error('No token found');
       return;
     }
-    
+
     const res = await fetch('https://api.jewelsamarth.in/api/product/add', {
       method: 'POST',
       body: JSON.stringify(productData),
