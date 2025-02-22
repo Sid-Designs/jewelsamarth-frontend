@@ -217,7 +217,7 @@ const AddProduct = () => {
               </div>
               <div className="formGroup">
                 <label htmlFor="ProdGender">Gender</label>
-                <GenderCheckBox />
+                <GenderCheckBox selectedGender={gender} handleGenderChange={handleGenderChange}/>
               </div>
             </div>
           </form>
