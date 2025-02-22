@@ -1,23 +1,44 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const GenderCheckBox = () => {
+const GenderCheckBox = ({ selectedGender, handleGenderChange }) => {
   return (
     <StyledWrapper>
       <div className="container">
         <div className="tabs">
-          <input type="radio" id="radio-1" name="tabs" defaultChecked />
+          <input
+            type="radio"
+            id="radio-1"
+            name="tabs"
+            value="Men"
+            checked={selectedGender === "Men"}
+            onChange={handleGenderChange}
+          />
           <label className="tab" htmlFor="radio-1">Men</label>
-          <input type="radio" id="radio-2" name="tabs" />
+          <input
+            type="radio"
+            id="radio-2"
+            name="tabs"
+            value="Women"
+            checked={selectedGender === "Women"}
+            onChange={handleGenderChange}
+          />
           <label className="tab" htmlFor="radio-2">Women</label>
-          <input type="radio" id="radio-3" name="tabs" />
+          <input
+            type="radio"
+            id="radio-3"
+            name="tabs"
+            value="Unisex"
+            checked={selectedGender === "Unisex"}
+            onChange={handleGenderChange}
+          />
           <label className="tab" htmlFor="radio-3">Unisex</label>
           <span className="glider" />
         </div>
       </div>
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   .container {

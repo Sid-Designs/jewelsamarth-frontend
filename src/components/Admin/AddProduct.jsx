@@ -19,6 +19,7 @@ const AddProduct = () => {
   const [mainImage, setMainImage] = useState('/JewelSamarth_Single_Logo.png');
   const [subImages, setSubImages] = useState([]);
   const [uploadPosition, setUploadPosition] = useState(null);
+  const [gender, setGender] = useState('Women');
 
   const handleSizeChange = (size) => {
     setSelectedSize(size);
@@ -28,6 +29,10 @@ const AddProduct = () => {
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setIsCategoryDropdownOpen(false);
+  };
+
+  const handleGenderChange = (e) => {
+    setGender(e.target.value);
   };
 
   const handleTagClick = (tag) => {
@@ -103,7 +108,7 @@ const AddProduct = () => {
       name: productName,
       description: productDescription,
       size: selectedSize,
-      gender: document.querySelector('input[name="gender"]:checked').value, // Capture gender value
+      gender,
       productCategory: selectedCategory,
       productTags: selectedTags,
       images: mainImage,
