@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import { Cloudinary } from '@cloudinary/url-gen';
-import { AdvancedImage } from '@cloudinary/react';
+import '@/assets/styles/AddProduct.css';
 import { Store, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import GenderCheckBox from '@/components/Admin/GenderCheckBox';
 import ImageUploadPopup from '@/components/Admin/ImageUploadPopup';
 import { Trash } from 'lucide-react';
 
 const AddProduct = () => {
-  const cld = new Cloudinary({ cloud: { cloudName: 'dplww7z06' } });
-  
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
@@ -19,7 +16,7 @@ const AddProduct = () => {
   const [isSizeDropdownOpen, setIsSizeDropdownOpen] = useState(false);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [mainImage, setMainImage] = useState(null);
+  const [mainImage, setMainImage] = useState('/JewelSamarth_Single_Logo.png');
   const [subImages, setSubImages] = useState([]);
   const [uploadPosition, setUploadPosition] = useState(null);
 
@@ -57,7 +54,7 @@ const AddProduct = () => {
 
   const handleDeleteImage = (position) => {
     if (position === 'main') {
-      setMainImage(null); // Set default image when main image is deleted
+      setMainImage('/JewelSamarth_Single_Logo.png'); // Set default image when main image is deleted
       setIsPopupOpen(false); // Close the popup when main image is deleted
     } else if (typeof position === 'number') {
       const updatedSubImages = subImages.filter((_, index) => index !== position); // Remove sub-image at specific index
@@ -177,12 +174,8 @@ const AddProduct = () => {
           <div className="sectionTitle">Upload Image</div>
           <div className="imgSec">
             <div className="imgCnt relative" onClick={() => openImageUploadPopup('main')}>
-              {mainImage ? (
-                <AdvancedImage cldImg={cld.image(mainImage)} />
-              ) : (
-                <img src='/JewelSamarth_Single_Logo.png' alt="Product" />
-              )}
-              {mainImage && (
+              <img src={mainImage || 'default_image_url'} alt="Product" />
+              {mainImage !== '/JewelSamarth_Single_Logo.png' && (
                 <div className="delete-icon" onClick={() => handleDeleteImage('main')}>
                   <Trash className="icon" />
                 </div>
@@ -191,7 +184,7 @@ const AddProduct = () => {
             <div className="subImgCnt flex flex-wrap">
               {subImages.map((image, i) => (
                 <div key={i} className="subImg" onClick={() => openImageUploadPopup(i)}>
-                  <AdvancedImage cldImg={cld.image(image)} />
+                  <img src={image} alt="Sub Product" />
                   <div className="delete-icon" onClick={() => handleDeleteImage(i)}>
                     <Trash className="icon" />
                   </div>
