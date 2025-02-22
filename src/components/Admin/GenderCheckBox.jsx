@@ -38,7 +38,7 @@ const GenderCheckBox = ({ selectedGender, handleGenderChange }) => {
       </div>
     </StyledWrapper>
   );
-};
+}
 
 const StyledWrapper = styled.div`
   .container {
