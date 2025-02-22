@@ -118,7 +118,7 @@ const AddProduct = () => {
     console.log('Product Data:', productData);
 
     // Send to the backend 
-    const res = await fetch('https://https://api.jewelsamarth.in/api/product/add', {
+    const res = await fetch('https://api.jewelsamarth.in/api/product/add', {
       method: 'POST',
       body: JSON.stringify(productData),
       headers: {
