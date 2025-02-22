@@ -7,7 +7,8 @@ const ImageUploadPopup = ({ onClose, onUpload, position }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files); // Convert FileList to Array
+    const files = Array.from(e.target.files);
+    console.log(files);
     if (files.length > 0) {
       const updatedFileNames = files.map((file) => file.name);
       setFileNames(updatedFileNames);
