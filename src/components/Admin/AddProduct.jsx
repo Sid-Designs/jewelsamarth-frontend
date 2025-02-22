@@ -43,26 +43,45 @@ const AddProduct = () => {
   const handleImageUpload = async (imageUrls, position, files) => {
     console.log('Image URLs:', imageUrls);
     console.log('Files:', files);
-    const data = new FormData();
-    data.append('file', files);
-    data.append('upload_preset', 'JewelSamarthCloud');
-    data.append("cloud_name", "dplww7z06");
-    const res = await fetch("https://api.cloudinary.com/v1_1/dplww7z06/image/upload", {
-      method: "post",
-      body: data
+  
+    const uploadPromises = files.map(async (file) => {
+      const data = new FormData();
+      data.append('file', file);
+      data.append('upload_preset', 'JewelSamarthCloud'); 
+      data.append('cloud_name', 'dplww7z06');
+  
+      try {
+        const res = await fetch('https://api.cloudinary.com/v1_1/dplww7z06/image/upload', {
+          method: 'POST',
+          body: data
+        });
+  
+        if (!res.ok) {
+          throw new Error('Failed to upload image');
+        }
+  
+        const dataJson = await res.json();
+        console.log(dataJson);
+        return dataJson.secure_url;
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        return null;
+      }
     });
-    const dataJson = await res.json();
-    console.log(dataJson);
+  
+    const uploadedImageUrls = await Promise.all(uploadPromises);
+  
     if (position === 'main') {
-      setMainImage(imageUrls[0]); // For main image, only the first image is selected
+      setMainImage(uploadedImageUrls[0]); // For main image, only the first image is selected
     } else if (position === 'new') {
-      setSubImages([...subImages, ...imageUrls]); // For sub-images, add all selected images
+      setSubImages([...subImages, ...uploadedImageUrls]); // For sub-images, add all selected images
     } else if (typeof position === 'number') {
       const updatedSubImages = [...subImages];
-      updatedSubImages[position] = imageUrls[0]; // Update the specific sub-image
+      updatedSubImages[position] = uploadedImageUrls[0]; // Update the specific sub-image
       setSubImages(updatedSubImages);
     }
   };
+  
 
   const handleDeleteImage = (position) => {
     if (position === 'main') {
