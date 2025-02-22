@@ -146,7 +146,7 @@ const AddProduct = () => {
         console.log('Product Added Successfully:', data.message);
         // Optionally: Reset the form or update the UI to reflect the successful addition
       } else {
-        console.log('Error Adding Product:', data.message);
+        console.log('Error Adding Product:', data);
       }
     } catch (error) {
       console.error('Error:', error);
