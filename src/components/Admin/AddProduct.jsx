@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
-import { Store, Plus, ChevronDown, ChevronUp } from 'lucide-react';
+import { Store, Plus, ChevronDown, ChevronUp, Trash } from 'lucide-react';
 import GenderCheckBox from '@/components/Admin/GenderCheckBox';
 import ImageUploadPopup from '@/components/Admin/ImageUploadPopup';
-import { Trash } from 'lucide-react';
 
 const AddProduct = () => {
   // Initialize Cloudinary with your cloud name
@@ -44,15 +43,21 @@ const AddProduct = () => {
     setSelectedTags(selectedTags.filter((t) => t !== tag));
   };
 
-  const handleImageUpload = (imageUrls, position) => {
-    if (position === 'main') {
-      setMainImage(imageUrls[0]); 
-    } else if (position === 'new') {
-      setSubImages([...subImages, ...imageUrls]); 
-    } else if (typeof position === 'number') {
-      const updatedSubImages = [...subImages];
-      updatedSubImages[position] = imageUrls[0]; 
-      setSubImages(updatedSubImages);
+  const handleImageUpload = async (files, position) => {
+    try {
+      const uploadedUrls = await uploadImagesToCloudinary(files);
+
+      if (position === 'main') {
+        setMainImage(uploadedUrls[0]); 
+      } else if (position === 'new') {
+        setSubImages([...subImages, ...uploadedUrls]); 
+      } else if (typeof position === 'number') {
+        const updatedSubImages = [...subImages];
+        updatedSubImages[position] = uploadedUrls[0]; 
+        setSubImages(updatedSubImages);
+      }
+    } catch (error) {
+      console.error('Error uploading images:', error);
     }
   };
 
@@ -71,13 +76,15 @@ const AddProduct = () => {
     setIsPopupOpen(true);
   };
 
-  const uploadImagesToCloudinary = async (images) => {
-    const uploadPromises = images.map(image => {
+  const uploadImagesToCloudinary = async (files) => {
+    const cloudName = cld.cloudinaryConfig?.cloud?.cloudName || 'dplww7z06';
+
+    const uploadPromises = files.map(file => {
       const formData = new FormData();
-      formData.append('file', image);
+      formData.append('file', file);
       formData.append('upload_preset', 'JewelSamarthCloud'); // Ensure this is the correct preset
 
-      return fetch(`https://api.cloudinary.com/v1_1/${cld.config.cloud.cloudName}/image/upload`, {
+      return fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
         method: 'POST',
         body: formData,
       }).then(response => response.json());
@@ -88,19 +95,20 @@ const AddProduct = () => {
   };
 
   const handleAddProduct = async () => {
-    const imagesToUpload = [mainImage, ...subImages].filter(Boolean); 
+    if (!productName || !selectedCategory || !mainImage) {
+      alert('Please fill in all required fields.');
+      return;
+    }
 
     try {
-      const uploadedImageUrls = await uploadImagesToCloudinary(imagesToUpload);
-
       const productData = {
         name: productName,
         description: productDescription,
         size: selectedSize,
         category: selectedCategory,
         tags: selectedTags,
-        mainImage: uploadedImageUrls[0], 
-        subImages: uploadedImageUrls.slice(1), 
+        mainImage, 
+        subImages, 
         price: {
           regularPrice: document.getElementById('RegularPrice').value,
           salePrice: document.getElementById('SalePrice').value
@@ -110,9 +118,9 @@ const AddProduct = () => {
       };
 
       console.log('Product Data:', productData);
-
+      
     } catch (error) {
-      console.error('Error uploading images:', error);
+      console.error('Error adding product:', error);
     }
   };
 
@@ -152,37 +160,6 @@ const AddProduct = () => {
                 onChange={(e) => setProductDescription(e.target.value)}
               />
             </div>
-            <div className="formRow">
-              <div className="formGroup">
-                <label htmlFor="ProdSize">Size</label>
-                <div className="customSelect">
-                  <div
-                    className="selectTrigger w-[200px] flex justify-between items-center"
-                    onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
-                  >
-                    {selectedSize || 'Select Size'}
-                    {isSizeDropdownOpen ? <ChevronUp className="pr-2" /> : <ChevronDown className="pr-2" />}
-                  </div>
-                  {isSizeDropdownOpen && (
-                    <div className="selectDropdown">
-                      {[...Array(23)].map((_, i) => (
-                        <div
-                          key={i + 7}
-                          className="selectOption"
-                          onClick={() => handleSizeChange((i + 7).toString())}
-                        >
-                          {i + 7}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="formGroup">
-                <label htmlFor="ProdGender">Gender</label>
-                <GenderCheckBox />
-              </div>
-            </div>
           </form>
         </div>
         <div className="prodImg w-full md:w-[35%]">
@@ -200,19 +177,6 @@ const AddProduct = () => {
                 </div>
               )}
             </div>
-            <div className="subImgCnt flex flex-wrap">
-              {subImages.map((image, i) => (
-                <div key={i} className="subImg" onClick={() => openImageUploadPopup(i)}>
-                  <AdvancedImage cldImg={cld.image(image)} />
-                  <div className="delete-icon" onClick={() => handleDeleteImage(i)}>
-                    <Trash className="icon" />
-                  </div>
-                </div>
-              ))}
-              <div className="subImg" onClick={() => openImageUploadPopup('new')}>
-                <Plus />
-              </div>
-            </div>
           </div>
           {isPopupOpen && (
             <ImageUploadPopup
@@ -223,7 +187,7 @@ const AddProduct = () => {
           )}
         </div>
       </div>
-      <div className="prodDtl mt-4 flex flex-col md:flex-row">
+<div className="prodDtl mt-4 flex flex-col md:flex-row">
         <div className="prodInfo w-full md:w-[65%]">
           <div className="sectionTitle">Pricing and Stock</div>
           <form>
@@ -313,7 +277,7 @@ const AddProduct = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> 
     </div>
   );
 };
