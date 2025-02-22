@@ -44,8 +44,8 @@ const AddProduct = () => {
     console.log('Image URLs:', imageUrls);
     console.log('Files:', files);
     const data = new FormData();
-    data.append("file", files);
-    data.append("upload_preset", "JewelSamarthCloud");
+    data.append('file', files);
+    data.append('upload_preset', 'JewelSamarthCloud');
     data.append("cloud_name", "dplww7z06");
     const res = await fetch("https://api.cloudinary.com/v1_1/dplww7z06/image/upload", {
       method: "post",
