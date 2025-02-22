@@ -75,7 +75,7 @@ const AddProduct = () => {
     const uploadPromises = images.map(image => {
       const formData = new FormData();
       formData.append('file', image);
-      formData.append('upload_preset', 'JewelSamarthCloud'); // Replace with your upload preset
+      formData.append('upload_preset', 'JewelSamarthCloud'); // Ensure this is the correct preset
 
       return fetch(`https://api.cloudinary.com/v1_1/${cld.config.cloud.cloudName}/image/upload`, {
         method: 'POST',
@@ -157,7 +157,7 @@ const AddProduct = () => {
                 <label htmlFor="ProdSize">Size</label>
                 <div className="customSelect">
                   <div
-                    className="selectTrigger w-[ 200px] flex justify-between items-center"
+                    className="selectTrigger w-[200px] flex justify-between items-center"
                     onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
                   >
                     {selectedSize || 'Select Size'}
@@ -265,7 +265,7 @@ const AddProduct = () => {
                 onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
               >
                 {selectedCategory || 'Select Category'}
-                {isCategoryDropdownOpen ? <ChevronUp className="pr-2" /> : <ChevronDown className=" pr-2" />}
+                {isCategoryDropdownOpen ? <ChevronUp className="pr-2" /> : <ChevronDown className="pr-2" />}
               </div>
               {isCategoryDropdownOpen && (
                 <div className="selectDropdown selectCat">
