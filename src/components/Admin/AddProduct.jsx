@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import '@/assets/styles/AddProduct.css';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { AdvancedImage } from '@cloudinary/react';
 import { Store, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import GenderCheckBox from '@/components/Admin/GenderCheckBox';
 import ImageUploadPopup from '@/components/Admin/ImageUploadPopup';
 import { Trash } from 'lucide-react';
 
 const AddProduct = () => {
+  // Initialize Cloudinary with your cloud name
+  const cld = new Cloudinary({ cloud: { cloudName: 'dplww7z06' } });
+
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
@@ -16,7 +20,7 @@ const AddProduct = () => {
   const [isSizeDropdownOpen, setIsSizeDropdownOpen] = useState(false);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [mainImage, setMainImage] = useState('/JewelSamarth_Single_Logo.png');
+  const [mainImage, setMainImage] = useState(null);
   const [subImages, setSubImages] = useState([]);
   const [uploadPosition, setUploadPosition] = useState(null);
 
@@ -42,22 +46,22 @@ const AddProduct = () => {
 
   const handleImageUpload = (imageUrls, position) => {
     if (position === 'main') {
-      setMainImage(imageUrls[0]); // For main image, only the first image is selected
+      setMainImage(imageUrls[0]); 
     } else if (position === 'new') {
-      setSubImages([...subImages, ...imageUrls]); // For sub-images, add all selected images
+      setSubImages([...subImages, ...imageUrls]); 
     } else if (typeof position === 'number') {
       const updatedSubImages = [...subImages];
-      updatedSubImages[position] = imageUrls[0]; // Update the specific sub-image
+      updatedSubImages[position] = imageUrls[0]; 
       setSubImages(updatedSubImages);
     }
   };
 
   const handleDeleteImage = (position) => {
     if (position === 'main') {
-      setMainImage('/JewelSamarth_Single_Logo.png'); // Set default image when main image is deleted
-      setIsPopupOpen(false); // Close the popup when main image is deleted
+      setMainImage(null); 
+      setIsPopupOpen(false); 
     } else if (typeof position === 'number') {
-      const updatedSubImages = subImages.filter((_, index) => index !== position); // Remove sub-image at specific index
+      const updatedSubImages = subImages.filter((_, index) => index !== position); 
       setSubImages(updatedSubImages);
     }
   };
@@ -67,38 +71,49 @@ const AddProduct = () => {
     setIsPopupOpen(true);
   };
 
-  const handleAddProduct = () => {
-    const productData = {
-      name: productName,
-      description: productDescription,
-      size: selectedSize,
-      category: selectedCategory,
-      tags: selectedTags,
-      mainImage,
-      subImages,
-      price: {
-        regularPrice: document.getElementById('RegularPrice').value,
-        salePrice: document.getElementById('SalePrice').value
-      },
-      stock: document.getElementById('Stock').value,
-      sku: document.getElementById('SKU').value
-    };
+  const uploadImagesToCloudinary = async (images) => {
+    const uploadPromises = images.map(image => {
+      const formData = new FormData();
+      formData.append('file', image);
+      formData.append('upload_preset', 'your_upload_preset'); // Replace with your upload preset
 
-    // Log all data in the console
-    console.log('Product Data:', productData);
+      return fetch(`https://api.cloudinary.com/v1_1/${cld.config.cloud.cloudName}/image/upload`, {
+        method: 'POST',
+        body: formData,
+      }).then(response => response.json());
+    });
 
-    // Send to the backend (you can replace this with an actual API call)
-    // Example:
-    // fetch('/api/products', {
-    //   method: 'POST',
-    //   body: JSON.stringify(productData),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then(response => response.json())
-    //   .then(data => console.log(data))
-    //   .catch(error => console.error('Error:', error));
+    const uploadedImages = await Promise.all(uploadPromises);
+    return uploadedImages.map(img => img.secure_url); 
+  };
+
+  const handleAddProduct = async () => {
+    const imagesToUpload = [mainImage, ...subImages].filter(Boolean); 
+
+    try {
+      const uploadedImageUrls = await uploadImagesToCloudinary(imagesToUpload);
+
+      const productData = {
+        name: productName,
+        description: productDescription,
+        size: selectedSize,
+        category: selectedCategory,
+        tags: selectedTags,
+        mainImage: uploadedImageUrls[0], 
+        subImages: uploadedImageUrls.slice(1), 
+        price: {
+          regularPrice: document.getElementById('RegularPrice').value,
+          salePrice: document.getElementById('SalePrice').value
+        },
+        stock: document.getElementById('Stock').value,
+        sku: document.getElementById('SKU').value
+      };
+
+      console.log('Product Data:', productData);
+
+    } catch (error) {
+      console.error('Error uploading images:', error);
+    }
   };
 
   return (
@@ -142,7 +157,7 @@ const AddProduct = () => {
                 <label htmlFor="ProdSize">Size</label>
                 <div className="customSelect">
                   <div
-                    className="selectTrigger w-[200px] flex justify-between items-center"
+                    className="selectTrigger w-[ 200px] flex justify-between items-center"
                     onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
                   >
                     {selectedSize || 'Select Size'}
@@ -174,8 +189,12 @@ const AddProduct = () => {
           <div className="sectionTitle">Upload Image</div>
           <div className="imgSec">
             <div className="imgCnt relative" onClick={() => openImageUploadPopup('main')}>
-              <img src={mainImage || 'default_image_url'} alt="Product" />
-              {mainImage !== '/JewelSamarth_Single_Logo.png' && (
+              {mainImage ? (
+                <AdvancedImage cldImg={cld.image(mainImage)} />
+              ) : (
+                <img src='/JewelSamarth_Single_Logo.png' alt="Product" />
+              )}
+              {mainImage && (
                 <div className="delete-icon" onClick={() => handleDeleteImage('main')}>
                   <Trash className="icon" />
                 </div>
@@ -184,7 +203,7 @@ const AddProduct = () => {
             <div className="subImgCnt flex flex-wrap">
               {subImages.map((image, i) => (
                 <div key={i} className="subImg" onClick={() => openImageUploadPopup(i)}>
-                  <img src={image} alt="Sub Product" />
+                  <AdvancedImage cldImg={cld.image(image)} />
                   <div className="delete-icon" onClick={() => handleDeleteImage(i)}>
                     <Trash className="icon" />
                   </div>
@@ -246,7 +265,7 @@ const AddProduct = () => {
                 onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
               >
                 {selectedCategory || 'Select Category'}
-                {isCategoryDropdownOpen ? <ChevronUp className="pr-2" /> : <ChevronDown className="pr-2" />}
+                {isCategoryDropdownOpen ? <ChevronUp className="pr-2" /> : <ChevronDown className=" pr-2" />}
               </div>
               {isCategoryDropdownOpen && (
                 <div className="selectDropdown selectCat">
