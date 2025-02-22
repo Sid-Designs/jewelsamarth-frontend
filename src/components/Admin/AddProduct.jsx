@@ -6,13 +6,13 @@ import ImageUploadPopup from '@/components/Admin/ImageUploadPopup';
 import { Trash } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import SizeSelector from '../SizeSelector';
+import ProductTags from '../ProductTags';
 
 const AddProduct = () => {
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedTags, setSelectedTags] = useState([]);
   const [isTagDropdownOpen, setIsTagDropdownOpen] = useState(false);
   const [availableTags] = useState(['Fashion', 'Jewelry', 'Accessories', 'New Arrival', 'Sale']);
   const [isSizeDropdownOpen, setIsSizeDropdownOpen] = useState(false);
@@ -24,6 +24,7 @@ const AddProduct = () => {
   const [gender, setGender] = useState('Women');
   const [size, setSize] = useState();
   const [load, setLoad] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
 
 
   const handleSizeChange = (sizeRange) => {
@@ -72,7 +73,9 @@ const AddProduct = () => {
 
         const dataJson = await res.json();
         console.log(dataJson);
-        setLoad(false);
+        setTimeout(() =>{
+          setLoad(false);
+        }, 2000);
         return dataJson.secure_url;
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -225,7 +228,7 @@ const AddProduct = () => {
                   </div>
                 </div> :
                 <>
-                  <img src={mainImage || 'default_image_url'} alt="Product" />
+                  <img className='h-[100%] w-full' src={mainImage || 'default_image_url'} alt="Product" />
                   {mainImage !== '/JewelSamarth_Single_Logo.png' && (
                     <div className="delete-icon" onClick={() => handleDeleteImage('main')}>
                       <Trash className="icon" />
@@ -290,7 +293,7 @@ const AddProduct = () => {
             </div>
           </form>
         </div>
-        <div className="prodImg w-full md:w-[35%]">
+        <div className="prodCat w-full md:w-[35%]">
           <div className="sectionTitle">Category</div>
           <div className="formGroup">
             <label htmlFor="ProdCat">Product Category</label>
@@ -317,36 +320,7 @@ const AddProduct = () => {
               )}
             </div>
           </div>
-          <div className="formGroup">
-            <label htmlFor="ProdTags">Product Tags</label>
-            <div className="tagsInputContainer">
-              <div className="tagsList">
-                {selectedTags.map((tag) => (
-                  <div key={tag} className="tagChip">
-                    {tag}
-                    <button onClick={() => removeTag(tag)}>×</button>
-                  </div>
-                ))}
-              </div>
-              <input
-                type="text"
-                placeholder="Add tags..."
-                onFocus={() => setIsTagDropdownOpen(true)}
-                onBlur={() => setTimeout(() => setIsTagDropdownOpen(false), 100)}
-              />
-              {isTagDropdownOpen && (
-                <div className="tagsDropdown">
-                  {availableTags
-                    .filter((tag) => !selectedTags.includes(tag))
-                    .map((tag) => (
-                      <div key={tag} className="tagOption" onMouseDown={() => handleTagClick(tag)}>
-                        {tag}
-                      </div>
-                    ))}
-                </div>
-              )}
-            </div>
-          </div>
+          <ProductTags selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
         </div>
       </div>
       <ToastContainer
