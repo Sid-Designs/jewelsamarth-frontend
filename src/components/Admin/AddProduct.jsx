@@ -41,6 +41,7 @@ const AddProduct = () => {
   };
 
   const handleImageUpload = (imageUrls, position) => {
+    console.log('Image URLs:', imageUrls);
     if (position === 'main') {
       setMainImage(imageUrls[0]); // For main image, only the first image is selected
     } else if (position === 'new') {
@@ -84,7 +85,6 @@ const AddProduct = () => {
       sku: document.getElementById('SKU').value
     };
 
-    // Log all data in the console
     console.log('Product Data:', productData);
 
     // Send to the backend (you can replace this with an actual API call)
