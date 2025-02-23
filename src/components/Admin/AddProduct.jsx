@@ -11,7 +11,7 @@ import ProductTags from '../ProductTags';
 const AddProduct = () => {
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
-  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedSize, setSelectedSize] = useState(''); // This holds the selected size
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isTagDropdownOpen, setIsTagDropdownOpen] = useState(false);
   const [availableTags] = useState(['Fashion', 'Jewelry', 'Accessories', 'New Arrival', 'Sale']);
@@ -29,7 +29,7 @@ const AddProduct = () => {
   const resetForm = () => {
     setProductName('');
     setProductDescription('');
-    setSelectedSize('');
+    setSelectedSize(''); // Resetting selected size
     setSelectedCategory('');
     setMainImage('/JewelSamarth_Single_Logo.png');
     setSubImages([]);
