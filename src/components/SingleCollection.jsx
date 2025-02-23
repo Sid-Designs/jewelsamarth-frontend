@@ -1,45 +1,24 @@
-import { useState, useEffect } from 'react';
-import React from 'react';
-import '../assets/styles/SingleProduct.css';
+import { useState } from 'react';
+import React from 'react'
+import '../assets/styles/SingleProduct.css'
 import { RotateCw, CircleHelp, History, Truck, Gem, ShieldCheck, CalendarSync } from 'lucide-react';
 
 const SingleCollection = () => {
-  const [mainImage, setMainImage] = useState("");
-  const [subImages, setSubImages] = useState([]);
-  const [productDetails, setProductDetails] = useState({});
-  const [activeTab, setActiveTab] = useState("description");
-
-  useEffect(() => {
-    const fetchProductData = async () => {
-      try {
-        const response = await fetch("https://api.jewelsamarth.in/api/product/67bb2fd763535ebe8ebe70d4"); // Replace with your actual API endpoint
-        const data = await response.json();
-        console.log(data); // Log the data to see its structure
-
-        // Assuming the API returns an object with the product details
-        if (data.success && data.product) {
-          const product = data.product; // Adjust based on the actual response structure
-          setProductDetails(product);
-          setMainImage(product.mainImage || ""); // Set the main image from the API
-          setSubImages(product.subImages || []); // Set the sub images from the API
-        } else {
-          console.error("Error fetching product data:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
-
-    fetchProductData();
-  }, []);
-
+  const [mainImage, setMainImage] = useState("https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8amV3ZWxyeXxlbnwwfHwwfHx8MA%3D%3D");
+  const [subImages, setSubImages] = useState([
+    "https://images.unsplash.com/photo-1561828995-aa79a2db86dd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8amV3ZWxyeXxlbnwwfHwwfHx8MA%3D%3D",
+    "https://plus.unsplash.com/premium_photo-1709033404514-c3953af680b4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8amV3ZWxyeXxlbnwwfHwwfHx8MA%3D%3D",
+    "https://plus.unsplash.com/premium_photo-1681276170281-cf50a487a1b7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8amV3ZWxyeXxlbnwwfHwwfHx8MA%3D%3D",
+    "https://plus.unsplash.com/premium_photo-1681276170281-cf50a487a1b7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8amV3ZWxyeXxlbnwwfHwwfHx8MA%3D%3D",
+    "https://plus.unsplash.com/premium_photo-1681276170281-cf50a487a1b7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8amV3ZWxyeXxlbnwwfHwwfHx8MA%3D%3D",
+  ]);
   const handleImageClick = (clickedImage, index) => {
     const newSubImages = [...subImages];
     newSubImages[index] = mainImage;
     setSubImages(newSubImages);
     setMainImage(clickedImage);
   };
-
+  const [activeTab, setActiveTab] = useState("description");
   return (
     <>
       <div className="singleProd flex justify-center items-start px-8">
@@ -71,19 +50,19 @@ const SingleCollection = () => {
 
         <div className="singleProdDtl w-full flex justify-center items-start flex-col p-8">
           <div className="singleProdTitle font-bold text-2xl">
-            {productDetails.title || "Product Heading"}
+            Product Heading
           </div>
           <div className="singleProdPrice flex gap-2 items-center mb-4">
-            <div className="salePrice text-2xl pr-2">₹{productDetails.salePrice || "0.00"}</div>
+            <div className="salePrice text-2xl pr-2">₹599.00</div>
             <div className="regPrice text-md line-through text-gray-500">
-              ₹{productDetails.regPrice || "0.00"}
+              ₹799.00
             </div>
             <div className="prodTax text-gray-500">Incl. of all taxes</div>
           </div>
 
           <div>
             <span className="text-sm">Availability:</span>
-            <span className="text-sm text-green-700">{productDetails.availability || "In Stock"}</span>
+            <span className="text-sm text-green-700">In Stock</span>
           </div>
 
           <div className="singleProdPincode my-4 w-[50%]">
@@ -98,7 +77,7 @@ const SingleCollection = () => {
             <div className="addToCartBtn w-full text-center py-2 mx-4 ml-0">
               Add To Cart
             </div>
-            <div className ="buyNowBtn w-full text-center py-2 mx-4">
+            <div className="buyNowBtn w-full text-center py-2 mx-4">
               Buy Now
             </div>
           </div>
@@ -168,7 +147,7 @@ const SingleCollection = () => {
             <div>
               <h2 className="text-lg font-semibold">Product Description</h2>
               <p className="text-gray-700">
-                {productDetails.description || "This is a detailed description of the product. It highlights the features, benefits, and specifications."}
+                This is a detailed description of the product. It highlights the features, benefits, and specifications.
               </p>
             </div>
           )}
@@ -182,7 +161,7 @@ const SingleCollection = () => {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default SingleCollection;
+export default SingleCollection
