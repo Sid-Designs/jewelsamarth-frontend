@@ -25,8 +25,14 @@ export default function ProductsTable() {
       try {
         const response = await fetch("https://api.jewelsamarth.in/api/product/all");
         const data = await response.json();
-        // Assuming the API returns an array of products
-        setProducts(data);
+        console.log(data); // Log the data to see its structure
+
+        // Assuming the products are in data.products
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else {
+          console.error("Expected an array of products, but got:", data);
+        }
       } catch (error) {
         console.error("Error fetching products:", error);
       }
