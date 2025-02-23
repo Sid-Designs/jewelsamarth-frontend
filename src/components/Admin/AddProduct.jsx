@@ -22,15 +22,30 @@ const AddProduct = () => {
   const [subImages, setSubImages] = useState([]);
   const [uploadPosition, setUploadPosition] = useState(null);
   const [gender, setGender] = useState('Women');
-  const [size, setSize] = useState();
   const [load, setLoad] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
 
+  // Function to reset the form
+  const resetForm = () => {
+    setProductName('');
+    setProductDescription('');
+    setSelectedSize('');
+    setSelectedCategory('');
+    setMainImage('/JewelSamarth_Single_Logo.png');
+    setSubImages([]);
+    setGender('Women');
+    setSelectedTags([]);
+    document.getElementById('RegularPrice').value = '';
+    document.getElementById('SalePrice').value = '';
+    document.getElementById('Stock').value = '';
+    document.getElementById('SKU').value = '';
+  };
 
   const handleSizeChange = (sizeRange) => {
-    setSize(sizeRange);
+    setSelectedSize(sizeRange);
     console.log("Selected Size Range:", sizeRange);
   };
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setIsCategoryDropdownOpen(false);
@@ -73,7 +88,7 @@ const AddProduct = () => {
 
         const dataJson = await res.json();
         console.log(dataJson);
-        setTimeout(() =>{
+        setTimeout(() => {
           setLoad(false);
         }, 2000);
         return dataJson.secure_url;
@@ -95,7 +110,6 @@ const AddProduct = () => {
       setSubImages(updatedSubImages);
     }
   };
-
 
   const handleDeleteImage = (position) => {
     if (position === 'main') {
@@ -157,8 +171,7 @@ const AddProduct = () => {
 
       if (data.success) {
         toast.success('Product Added Successfully:', data.message);
-        return window.location.reload();
-        // Optionally: Reset the form or update the UI to reflect the successful addition
+        resetForm(); // Reset the form after successful addition
       } else {
         toast.error('Error Adding Product:', data);
       }
@@ -237,7 +250,6 @@ const AddProduct = () => {
                   )}
                 </>
               }
-
             </div>
             <div className="subImgCnt flex flex-wrap">
               {subImages.map((image, i) => (
