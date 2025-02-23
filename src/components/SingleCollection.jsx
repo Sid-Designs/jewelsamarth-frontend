@@ -52,8 +52,8 @@ const SingleCollection = () => {
   };
 
   return (
-    <div className="singleProd flex justify-center items-start px-8">
-      <div className="flex flex-col">
+    <div className="singleProd flex flex-col justify-center items-start px-8">
+      <div className="flex">
         {/* Left Image Section */}
         <div className="singleProdImg w-full flex py-8">
           <ul className="singleSubProdImg flex flex-col justify-start items-center pt-2 gap-4">
