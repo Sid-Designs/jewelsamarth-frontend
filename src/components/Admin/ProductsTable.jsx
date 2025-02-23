@@ -17,11 +17,13 @@ export default function ProductsTable() {
   const [showStockModal, setShowStockModal] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
   const [newStockValue, setNewStockValue] = useState("");
+  const [loading, setLoading] = useState(true); // Loading state
 
   const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true); // Set loading to true before fetching
       try {
         const response = await fetch("https://api.jewelsamarth.in/api/product/all");
         const data = await response.json();
@@ -36,6 +38,8 @@ export default function ProductsTable() {
         }
       } catch (error) {
         console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
     };
 
@@ -105,58 +109,64 @@ export default function ProductsTable() {
         />
       </div>
 
-      <Table className="border prodTblSec border-gray-200 rounded-[15px] overflow-hidden">
-        <TableHeader className="bg-gray-100 prodTblHead">
-          <TableRow>
-            <TableHead className="w-12">
-              <Checkbox
-                checked={selected.length === currentData.length}
-                onCheckedChange={() =>
-                  setSelected(selected.length === currentData.length ? [] : currentData.map((p) => p.id))
-                }
-              />
-            </TableHead>
-            <TableHead>Sr</TableHead>
-            <TableHead>Product Name</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead onClick={() => handleSort("regularPrice")} className="cursor-pointer">Regular Price</TableHead>
-            <TableHead onClick={() => handleSort("salePrice")} className="cursor-pointer">Sale Price</TableHead>
-            <TableHead onClick={() => handleSort("stock")} className="cursor-pointer">Stock</TableHead>
-            <TableHead>Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="border border-gray-200">
-          {currentData.map((product, index) => (
-            <TableRow key={product._id}>
-              <TableCell><Checkbox checked={selected.includes(product._id)} /></TableCell>
-              <TableCell>{index + 1 + startIndex}</TableCell>
-              <TableCell>
-                <a href={`/products/${product._id}`} target="_blank">{product.name}</a>
-              </TableCell>
-              <TableCell>{product.productCategory}</TableCell>
-              <TableCell>₹{product.regprice}</TableCell>
-              <TableCell>₹{product.saleprice}</TableCell>
-              <TableCell>
-                <div className={`p-2 w-fit font-semibold text-white text-center rounded-[20px] ${product.stock > 0 ? "bg-green-500" : "bg-red-500"}`}>
-                  {product.stock > 0 ? `In Stock (${product.stock})` : "Out of Stock"}
-                </div>
-              </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost"><MoreVertical className="h-4 w-4" /></Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => alert("Edit functionality to be implemented")}>✏️ Edit</DropdownMenuItem>
-                    {product.stock > 0 && <DropdownMenuItem onClick={() => updateStock(product.id, 0)}>🚫 Make Stock 0</DropdownMenuItem>}
-                    {product.stock === 0 && <DropdownMenuItem onClick={() => openStockModal(product)}>✅ Make Available</DropdownMenuItem>}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+      {loading ? ( // Conditional rendering for loading state
+        <div className="flex justify-center items-center h-64">
+          <span className="text-lg">Loading products...</span>
+        </div>
+      ) : (
+        <Table className="border prodTblSec border-gray-200 rounded-[15px] overflow-hidden">
+          <TableHeader className="bg-gray-100 prodTblHead">
+            <TableRow>
+              <TableHead className="w-12">
+                <Checkbox
+                  checked={selected.length === currentData.length}
+                  onCheckedChange={() =>
+                    setSelected(selected.length === currentData.length ? [] : currentData.map((p) => p.id))
+                  }
+                />
+              </TableHead>
+              <TableHead>Sr</TableHead>
+              <TableHead>Product Name</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead onClick={() => handleSort("regularPrice")} className="cursor-pointer">Regular Price</TableHead>
+              <TableHead onClick={() => handleSort("salePrice")} className="cursor-pointer">Sale Price</TableHead>
+              <TableHead onClick={() => handleSort("stock")} className="cursor-pointer">Stock</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody className="border border-gray-200">
+            {currentData.map((product, index) => (
+              <TableRow key={product._id}>
+                <TableCell><Checkbox checked={selected.includes(product._id)} /></TableCell>
+                <TableCell>{index + 1 + startIndex}</TableCell>
+                <TableCell>
+                  <a href={`/products/${product._id}`} target="_blank">{product.name}</a>
+                </TableCell>
+                <TableCell>{product.productCategory}</TableCell>
+                <TableCell>₹{product.regprice}</TableCell>
+                <TableCell>₹{product.saleprice}</TableCell>
+                <TableCell>
+                  <div className={`p-2 w-fit font-semibold text-white text-center rounded-[20px] ${product.stock > 0 ? "bg-green-500" : "bg-red-500"}`}>
+                    {product.stock > 0 ? `In Stock (${product.stock})` : "Out of Stock"}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost"><MoreVertical className="h-4 w-4" /></Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => alert("Edit functionality to be implemented")}>✏️ Edit</DropdownMenuItem>
+                      {product.stock > 0 && <DropdownMenuItem onClick={() => updateStock(product.id, 0)}>🚫 Make Stock 0</DropdownMenuItem>}
+                      {product.stock === 0 && <DropdownMenuItem onClick={() => openStockModal(product)}>✅ Make Available</DropdownMenuItem>}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
 
       {/* Pagination */}
       <div className="flex justify-between items-center mt-8">
