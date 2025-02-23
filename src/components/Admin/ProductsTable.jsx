@@ -127,11 +127,11 @@ export default function ProductsTable() {
         </TableHeader>
         <TableBody className="border border-gray-200">
           {currentData.map((product, index) => (
-            <TableRow key={product.id}>
-              <TableCell><Checkbox checked={selected.includes(product.id)} /></TableCell>
+            <TableRow key={product._id}>
+              <TableCell><Checkbox checked={selected.includes(product._id)} /></TableCell>
               <TableCell>{index + 1 + startIndex}</TableCell>
               <TableCell>
-                <a href={`/api/product/${product.id}`}>{product.name}</a>
+                <a href={`/api/product/${product._id}`}>{product.name}</a>
               </TableCell>
               <TableCell>{product.productCategory}</TableCell>
               <TableCell>₹{product.regprice}</TableCell>
