@@ -41,7 +41,19 @@ const SingleCollection = () => {
     fetchProduct();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <>
+    <div className='flex justify-center items-center border h-full w-full'>
+      <div className="w-full flex justify-center items-center gap-x-2">
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="w-5 h-5 bg-[var(--primary-color)] rounded-full animate-bounce animate-pulse"
+            style={{ animationDelay: `${i * 0.2}s` }}
+          ></div>
+        ))}
+      </div>
+    </div>
+  </>;
   if (!product) return <div>Product not found</div>;
 
   const handleImageClick = (clickedImage, index) => {
