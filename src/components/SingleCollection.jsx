@@ -42,7 +42,7 @@ const SingleCollection = () => {
   }, [id]);
 
   if (loading) return <>
-    <div className='flex justify-center items-center border h-full w-full'>
+    <div className='flex justify-center items-center h-[90vh] w-full'>
       <div className="w-full flex justify-center items-center gap-x-2">
         {[0, 1, 2].map((i) => (
           <div
