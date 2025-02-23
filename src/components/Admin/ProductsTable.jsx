@@ -130,7 +130,9 @@ export default function ProductsTable() {
             <TableRow key={product.id}>
               <TableCell><Checkbox checked={selected.includes(product.id)} /></TableCell>
               <TableCell>{index + 1 + startIndex}</TableCell>
-              <TableCell>{product.name}</TableCell>
+              <TableCell>
+                <a href={`/api/product/${product.id}`}>{product.name}</a>
+              </TableCell>
               <TableCell>{product.productCategory}</TableCell>
               <TableCell>₹{product.regprice}</TableCell>
               <TableCell>₹{product.saleprice}</TableCell>
