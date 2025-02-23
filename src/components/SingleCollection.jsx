@@ -13,14 +13,15 @@ const SingleCollection = () => {
     const fetchProductData = async () => {
       try {
         const response = await fetch("https://api.jewelsamarth.in/api/product/1"); // Replace with your actual API endpoint
-        const data = await response.json();
+        const data = await response.json()
+        const product = data.products;
         console.log(data); // Log the data to see its structure
 
         // Assuming the API returns an object with the product details
-        if (data) {
-          setProductDetails(data);
-          setMainImage(data.mainImage || ""); // Set the main image from the API
-          setSubImages(data.subImages || []); // Set the sub images from the API
+        if (product) {
+          setProductDetails(product);
+          setMainImage(product.mainImage || ""); // Set the main image from the API
+          setSubImages(product.subImages || []); // Set the sub images from the API
         }
       } catch (error) {
         console.error("Error fetching product data:", error);
