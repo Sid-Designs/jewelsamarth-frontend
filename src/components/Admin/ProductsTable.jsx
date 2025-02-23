@@ -25,14 +25,13 @@ export default function ProductsTable() {
       try {
         const response = await fetch("https://api.jewelsamarth.in/api/product/all");
         const data = await response.json();
-        const products = data.products;
-        console.log(data.products); // Log the data to see its structure
+        console.log(data); // Log the data to see its structure
 
         // Assuming the products are in data.products
-        if (Array.isArray(products)) {
-          setProducts(products);
+        if (Array.isArray(data)) {
+          setProducts(data);
         } else {
-          console.error("Expected an array of products, but got:", products);
+          console.error("Expected an array of products, but got:", data);
         }
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -43,8 +42,12 @@ export default function ProductsTable() {
   }, []);
 
   const filteredProducts = products.filter((product) =>
-    [product.name, product.category, product.stock.toString()].some((field) =>
-      field.toLowerCase().includes(searchTerm.toLowerCase())
+    [
+      product.name ? product.name.toLowerCase() : '',
+      product.category ? product.category.toLowerCase() : '',
+      product.stock !== undefined ? product.stock.toString() : ''
+    ].some((field) =>
+      field.includes(searchTerm.toLowerCase())
     )
   );
 
@@ -127,9 +130,9 @@ export default function ProductsTable() {
               <TableCell><Checkbox checked={selected.includes(product.id)} /></TableCell>
               <TableCell>{index + 1 + startIndex}</TableCell>
               <TableCell>{product.name}</TableCell>
-              <TableCell>{product.productCategory}</TableCell>
-              <TableCell>₹{product.regprice}</TableCell>
-              <TableCell>₹{product.saleprice}</TableCell>
+              <TableCell>{product.category}</TableCell>
+              <TableCell>${product.regularPrice}</TableCell>
+              <TableCell>${product.salePrice}</TableCell>
               <TableCell>
                 <div className={`p-2 w-fit font-semibold text-white text-center rounded-[20px] ${product.stock > 0 ? "bg-green-500" : "bg-red-500"}`}>
                   {product.stock > 0 ? `In Stock (${product.stock})` : "Out of Stock"}
