@@ -541,3 +541,11 @@ textarea {
   right: 5px;
 }
 
+@media screen and (max-width: 768px) {
+  .subImg {
+    width: 80px;
+    height: fit-content;
+    min-height: 80px; 
+    min-width: 80px;
+  }
+}

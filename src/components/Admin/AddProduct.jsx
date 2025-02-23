@@ -26,11 +26,10 @@ const AddProduct = () => {
   const [load, setLoad] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
 
-
   const handleSizeChange = (sizeRange) => {
     setSize(sizeRange);
-    console.log("Selected Size Range:", sizeRange);
   };
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setIsCategoryDropdownOpen(false);
@@ -52,9 +51,6 @@ const AddProduct = () => {
 
   const handleImageUpload = async (imageUrls, position, files) => {
     setLoad(true);
-    console.log('Image URLs:', imageUrls);
-    console.log('Files:', files);
-
     const uploadPromises = files.map(async (file) => {
       const data = new FormData();
       data.append('file', file);
@@ -72,10 +68,7 @@ const AddProduct = () => {
         }
 
         const dataJson = await res.json();
-        console.log(dataJson);
-        setTimeout(() =>{
-          setLoad(false);
-        }, 2000);
+        setTimeout(() => setLoad(false), 2000);
         return dataJson.secure_url;
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -86,30 +79,14 @@ const AddProduct = () => {
     const uploadedImageUrls = await Promise.all(uploadPromises);
 
     if (position === 'main') {
-      setMainImage(uploadedImageUrls[0]); // For main image, only the first image is selected
+      setMainImage(uploadedImageUrls[0]);
     } else if (position === 'new') {
-      setSubImages([...subImages, ...uploadedImageUrls]); // For sub-images, add all selected images
+      setSubImages([...subImages, ...uploadedImageUrls]);
     } else if (typeof position === 'number') {
       const updatedSubImages = [...subImages];
-      updatedSubImages[position] = uploadedImageUrls[0]; // Update the specific sub-image
+      updatedSubImages[position] = uploadedImageUrls[0];
       setSubImages(updatedSubImages);
     }
-  };
-
-
-  const handleDeleteImage = (position) => {
-    if (position === 'main') {
-      setMainImage('/JewelSamarth_Single_Logo.png'); // Set default image when main image is deleted
-      setIsPopupOpen(false); // Close the popup when main image is deleted
-    } else if (typeof position === 'number') {
-      const updatedSubImages = subImages.filter((_, index) => index !== position); // Remove sub-image at specific index
-      setSubImages(updatedSubImages);
-    }
-  };
-
-  const openImageUploadPopup = (position) => {
-    setUploadPosition(position);
-    setIsPopupOpen(true);
   };
 
   const handleAddProduct = async () => {
@@ -117,6 +94,7 @@ const AddProduct = () => {
       toast.warn('Missing Details');
       return;
     }
+
     const productData = {
       name: productName,
       description: productDescription,
@@ -132,9 +110,6 @@ const AddProduct = () => {
       sku: document.getElementById('SKU').value
     };
 
-    console.log('Product Data:', productData);
-
-    // Get token from local storage
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -143,23 +118,34 @@ const AddProduct = () => {
     }
 
     try {
-      // Send product data to the backend
       const res = await fetch('https://api.jewelsamarth.in/api/product/add', {
         method: 'POST',
         body: JSON.stringify(productData),
         headers: {
           'Content-Type': 'application/json',
-          'x-auth-token': token // Attach the token here
+          'x-auth-token': token
         },
       });
 
       const data = await res.json();
 
       if (data.success) {
-        toast.success('Product Added Successfully:', data.message);
-        // Optionally: Reset the form or update the UI to reflect the successful addition
+        toast.success('Product Added Successfully');
+        setProductName('');
+        setProductDescription('');
+        setSelectedSize('');
+        setSelectedCategory('');
+        setSelectedTags([]);
+        setMainImage('/JewelSamarth_Single_Logo.png');
+        setSubImages([]);
+        setGender('Women');
+        setSize('');
+        document.getElementById('RegularPrice').value = '';
+        document.getElementById('SalePrice').value = '';
+        document.getElementById('Stock').value = '';
+        document.getElementById('SKU').value = '';
       } else {
-        toast.error('Error Adding Product:', data);
+        toast.error('Error Adding Product');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -228,7 +214,7 @@ const AddProduct = () => {
                   </div>
                 </div> :
                 <>
-                  <img className='h-[100%] w-full' src={mainImage || 'default_image_url'} alt="Product" />
+                  <img src={mainImage || 'default_image_url'} alt="Product" />
                   {mainImage !== '/JewelSamarth_Single_Logo.png' && (
                     <div className="delete-icon" onClick={() => handleDeleteImage('main')}>
                       <Trash className="icon" />
@@ -324,7 +310,6 @@ const AddProduct = () => {
         </div>
       </div>
       <ToastContainer
-        stacked
         position="bottom-right"
         autoClose={3000}
         limit={3}
