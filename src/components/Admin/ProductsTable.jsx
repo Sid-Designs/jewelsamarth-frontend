@@ -110,8 +110,16 @@ export default function ProductsTable() {
       </div>
 
       {loading ? ( // Conditional rendering for loading state
-        <div className="flex justify-center items-center h-64">
-          <span className="text-lg">Loading products...</span>
+        <div className='flex justify-center items-center h-[50vh] w-full'>
+          <div className="w-full flex justify-center items-center gap-x-2">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="w-5 h-5 bg-[var(--primary-color)] rounded-full animate-bounce animate-pulse"
+                style={{ animationDelay: `${i * 0.2}s` }}
+              ></div>
+            ))}
+          </div>
         </div>
       ) : (
         <Table className="border prodTblSec border-gray-200 rounded-[15px] overflow-hidden">
