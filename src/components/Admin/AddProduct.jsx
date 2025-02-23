@@ -157,6 +157,7 @@ const AddProduct = () => {
 
       if (data.success) {
         toast.success('Product Added Successfully:', data.message);
+        return window.location.reload();
         // Optionally: Reset the form or update the UI to reflect the successful addition
       } else {
         toast.error('Error Adding Product:', data);
