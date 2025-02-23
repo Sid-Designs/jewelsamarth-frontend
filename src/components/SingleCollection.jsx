@@ -34,7 +34,9 @@ const SingleCollection = () => {
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        },2000)
       }
     };
 
