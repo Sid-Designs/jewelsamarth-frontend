@@ -1,24 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
 
-const sampleProducts = Array.from({ length: 50 }, (_, index) => ({
-  id: index + 1,
-  image: `/headphone${(index % 5) + 1}.png`,
-  name: "Bluetooth & Wireless Over-Ear Headphones",
-  category: ["Electronics", "Home Appliances", "Fashion"][index % 3],
-  regularPrice: Math.floor(Math.random() * 300) + 200,
-  salePrice: Math.floor(Math.random() * 150) + 100,
-  stock: Math.random() > 0.3 ? Math.floor(Math.random() * 1000) : 0,
-}));
-
 export default function ProductsTable() {
-  const [products, setProducts] = useState(sampleProducts);
+  const [products, setProducts] = useState([]);
   const [selected, setSelected] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,6 +19,21 @@ export default function ProductsTable() {
   const [newStockValue, setNewStockValue] = useState("");
 
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("https://api.jewelsamarth.in/api/product/all");
+        const data = await response.json();
+        // Assuming the API returns an array of products
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const filteredProducts = products.filter((product) =>
     [product.name, product.category, product.stock.toString()].some((field) =>
@@ -54,7 +59,7 @@ export default function ProductsTable() {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
     }
-    setSelected([])
+    setSelected([]);
   };
 
   const updateStock = (id, stockValue) => {
