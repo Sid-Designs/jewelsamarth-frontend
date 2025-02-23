@@ -127,9 +127,9 @@ export default function ProductsTable() {
               <TableCell><Checkbox checked={selected.includes(product.id)} /></TableCell>
               <TableCell>{index + 1 + startIndex}</TableCell>
               <TableCell>{product.name}</TableCell>
-              <TableCell>{product.category}</TableCell>
-              <TableCell>${product.regularPrice}</TableCell>
-              <TableCell>${product.salePrice}</TableCell>
+              <TableCell>{product.productCategory}</TableCell>
+              <TableCell>${product.regprice}</TableCell>
+              <TableCell>${product.saleprice}</TableCell>
               <TableCell>
                 <div className={`p-2 w-fit font-semibold text-white text-center rounded-[20px] ${product.stock > 0 ? "bg-green-500" : "bg-red-500"}`}>
                   {product.stock > 0 ? `In Stock (${product.stock})` : "Out of Stock"}
