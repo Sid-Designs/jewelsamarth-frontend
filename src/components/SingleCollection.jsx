@@ -12,16 +12,18 @@ const SingleCollection = () => {
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const response = await fetch("https://api.jewelsamarth.in/api/product/1"); // Replace with your actual API endpoint
-        const data = await response.json()
-        const product = data.products;
+        const response = await fetch("https://api.jewelsamarth.in/api/product/67bb2fd763535ebe8ebe70d4"); // Replace with your actual API endpoint
+        const data = await response.json();
         console.log(data); // Log the data to see its structure
 
         // Assuming the API returns an object with the product details
-        if (product) {
+        if (data.success && data.product) {
+          const product = data.product; // Adjust based on the actual response structure
           setProductDetails(product);
           setMainImage(product.mainImage || ""); // Set the main image from the API
           setSubImages(product.subImages || []); // Set the sub images from the API
+        } else {
+          console.error("Error fetching product data:", data.message);
         }
       } catch (error) {
         console.error("Error fetching product data:", error);
@@ -72,9 +74,9 @@ const SingleCollection = () => {
             {productDetails.title || "Product Heading"}
           </div>
           <div className="singleProdPrice flex gap-2 items-center mb-4">
-            <div className="salePrice text-2xl pr-2">₹{productDetails.saleprice || "0.00"}</div>
+            <div className="salePrice text-2xl pr-2">₹{productDetails.salePrice || "0.00"}</div>
             <div className="regPrice text-md line-through text-gray-500">
-              ₹{productDetails.regprice || "0.00"}
+              ₹{productDetails.regPrice || "0.00"}
             </div>
             <div className="prodTax text-gray-500">Incl. of all taxes</div>
           </div>
@@ -96,7 +98,7 @@ const SingleCollection = () => {
             <div className="addToCartBtn w-full text-center py-2 mx-4 ml-0">
               Add To Cart
             </div>
-            <div className="buyNowBtn w-full text-center py-2 mx-4">
+            <div className ="buyNowBtn w-full text-center py-2 mx-4">
               Buy Now
             </div>
           </div>
