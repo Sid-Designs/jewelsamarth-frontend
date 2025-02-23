@@ -72,9 +72,9 @@ const SingleCollection = () => {
             {productDetails.title || "Product Heading"}
           </div>
           <div className="singleProdPrice flex gap-2 items-center mb-4">
-            <div className="salePrice text-2xl pr-2">₹{productDetails.salePrice || "0.00"}</div>
+            <div className="salePrice text-2xl pr-2">₹{productDetails.saleprice || "0.00"}</div>
             <div className="regPrice text-md line-through text-gray-500">
-              ₹{productDetails.regularPrice || "0.00"}
+              ₹{productDetails.regprice || "0.00"}
             </div>
             <div className="prodTax text-gray-500">Incl. of all taxes</div>
           </div>
