@@ -36,7 +36,7 @@ const SingleCollection = () => {
       } finally {
         setTimeout(() => {
           setLoading(false);
-        },2000)
+        },1000)
       }
     };
 
@@ -44,7 +44,7 @@ const SingleCollection = () => {
   }, [id]);
 
   if (loading) return <>
-    <div className='flex justify-center items-center h-[90vh] w-full'>
+    <div className='flex justify-center items-center h-[50vh] w-full'>
       <div className="w-full flex justify-center items-center gap-x-2">
         {[0, 1, 2].map((i) => (
           <div
