@@ -26,10 +26,11 @@ const AddProduct = () => {
   const [load, setLoad] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
 
+
   const handleSizeChange = (sizeRange) => {
     setSize(sizeRange);
+    console.log("Selected Size Range:", sizeRange);
   };
-
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setIsCategoryDropdownOpen(false);
@@ -51,6 +52,9 @@ const AddProduct = () => {
 
   const handleImageUpload = async (imageUrls, position, files) => {
     setLoad(true);
+    console.log('Image URLs:', imageUrls);
+    console.log('Files:', files);
+
     const uploadPromises = files.map(async (file) => {
       const data = new FormData();
       data.append('file', file);
@@ -68,7 +72,10 @@ const AddProduct = () => {
         }
 
         const dataJson = await res.json();
-        setTimeout(() => setLoad(false), 2000);
+        console.log(dataJson);
+        setTimeout(() =>{
+          setLoad(false);
+        }, 2000);
         return dataJson.secure_url;
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -79,14 +86,30 @@ const AddProduct = () => {
     const uploadedImageUrls = await Promise.all(uploadPromises);
 
     if (position === 'main') {
-      setMainImage(uploadedImageUrls[0]);
+      setMainImage(uploadedImageUrls[0]); // For main image, only the first image is selected
     } else if (position === 'new') {
-      setSubImages([...subImages, ...uploadedImageUrls]);
+      setSubImages([...subImages, ...uploadedImageUrls]); // For sub-images, add all selected images
     } else if (typeof position === 'number') {
       const updatedSubImages = [...subImages];
-      updatedSubImages[position] = uploadedImageUrls[0];
+      updatedSubImages[position] = uploadedImageUrls[0]; // Update the specific sub-image
       setSubImages(updatedSubImages);
     }
+  };
+
+
+  const handleDeleteImage = (position) => {
+    if (position === 'main') {
+      setMainImage('/JewelSamarth_Single_Logo.png'); // Set default image when main image is deleted
+      setIsPopupOpen(false); // Close the popup when main image is deleted
+    } else if (typeof position === 'number') {
+      const updatedSubImages = subImages.filter((_, index) => index !== position); // Remove sub-image at specific index
+      setSubImages(updatedSubImages);
+    }
+  };
+
+  const openImageUploadPopup = (position) => {
+    setUploadPosition(position);
+    setIsPopupOpen(true);
   };
 
   const handleAddProduct = async () => {
@@ -94,7 +117,6 @@ const AddProduct = () => {
       toast.warn('Missing Details');
       return;
     }
-
     const productData = {
       name: productName,
       description: productDescription,
@@ -110,6 +132,9 @@ const AddProduct = () => {
       sku: document.getElementById('SKU').value
     };
 
+    console.log('Product Data:', productData);
+
+    // Get token from local storage
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -118,34 +143,23 @@ const AddProduct = () => {
     }
 
     try {
+      // Send product data to the backend
       const res = await fetch('https://api.jewelsamarth.in/api/product/add', {
         method: 'POST',
         body: JSON.stringify(productData),
         headers: {
           'Content-Type': 'application/json',
-          'x-auth-token': token
+          'x-auth-token': token // Attach the token here
         },
       });
 
       const data = await res.json();
 
       if (data.success) {
-        toast.success('Product Added Successfully');
-        setProductName('');
-        setProductDescription('');
-        setSelectedSize('');
-        setSelectedCategory('');
-        setSelectedTags([]);
-        setMainImage('/JewelSamarth_Single_Logo.png');
-        setSubImages([]);
-        setGender('Women');
-        setSize('');
-        document.getElementById('RegularPrice').value = '';
-        document.getElementById('SalePrice').value = '';
-        document.getElementById('Stock').value = '';
-        document.getElementById('SKU').value = '';
+        toast.success('Product Added Successfully:', data.message);
+        // Optionally: Reset the form or update the UI to reflect the successful addition
       } else {
-        toast.error('Error Adding Product');
+        toast.error('Error Adding Product:', data);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -310,6 +324,7 @@ const AddProduct = () => {
         </div>
       </div>
       <ToastContainer
+        stacked
         position="bottom-right"
         autoClose={3000}
         limit={3}
