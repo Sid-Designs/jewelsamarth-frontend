@@ -75,7 +75,6 @@ const data = {
       title: "Posts",
       url: "#",
       icon: BookOpen,
-      url: "/products/67bb2fd763535ebe8ebe70d4",
       componentName: "Posts", // Add this property
       items: [],
     },
