@@ -6,8 +6,8 @@ const Collections = (productData) => {
     const subImg = productData.productData.subImages[1];
     const product = {
         name: productData.productData.name,
-        price: productData.productData.regprice,
-        oldPrice: productData.productData.saleprice,
+        price: productData.productData.saleprice,
+        oldPrice: productData.productData.regprice,
         category: productData.productData.productCategory,
         images: [
             mainImg,

@@ -16,6 +16,7 @@ import SingleCollection from './components/SingleCollection';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Payment from './pages/Payment';
+import EditProduct from './pages/EditProduct';
 
 const App = () => {
     const location = useLocation();
@@ -113,6 +114,12 @@ const App = () => {
                     <Route path="/products/:id" element={
                         <PageTransition>
                             <SingleCollection />
+                        </PageTransition>
+                    }
+                    />
+                    <Route path="/products/:id/edit" element={
+                        <PageTransition>
+                            <EditProduct/>
                         </PageTransition>
                     }
                     />

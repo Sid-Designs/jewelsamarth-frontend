@@ -9,6 +9,8 @@ import {
   Gem,
   ShieldCheck,
   CalendarSync,
+  Pencil,
+  SquarePen
 } from "lucide-react";
 import "../assets/styles/SingleProduct.css";
 
@@ -144,6 +146,10 @@ const SingleCollection = () => {
             <li className="w-fit flex gap-2 items-center">
               <CircleHelp className="text-gray-500" size={20} />
               Ask a Question
+            </li>
+            <li className="w-fit flex gap-2 items-center">
+              <SquarePen className="text-gray-500" size={20} />
+              Edit Product
             </li>
           </ul>
 
