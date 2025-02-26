@@ -14,7 +14,6 @@ const CollectionsPage = () => {
             const response = await fetch(API);
             const data = await response.json();
             const products = data.products
-            console.log(products);
             setProducts(products);
             setLoading(false);
         } catch (error) {
