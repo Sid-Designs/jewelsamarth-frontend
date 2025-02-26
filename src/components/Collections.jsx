@@ -25,6 +25,7 @@ const Collections = (productData) => {
                 >
                     {/* Default Image */}
                     <img
+                        loading='lazy'
                         src={product.images[0]}
                         alt="Product Image"
                         className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${hovered ? "opacity-0" : "opacity-100 scale-100"
