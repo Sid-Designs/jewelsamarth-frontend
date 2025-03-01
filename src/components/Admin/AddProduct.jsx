@@ -171,7 +171,7 @@ const AddProduct = () => {
 
       if (data.success) {
         toast.success('Product Added Successfully:', data.message);
-        resetForm(); // Reset the form after successful addition
+        resetForm(); 
       } else {
         toast.error('Error Adding Product:', data);
       }
