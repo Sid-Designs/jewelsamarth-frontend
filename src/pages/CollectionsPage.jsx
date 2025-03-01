@@ -6,6 +6,7 @@ import Collections from "@/components/Collections";
 
 const CollectionsPage = () => {
     const { collectionName } = useParams();
+    console.log("Collection Name:", collectionName);
     const API = `https://api.jewelsamarth.in/api/product/category/${collectionName}`;
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
