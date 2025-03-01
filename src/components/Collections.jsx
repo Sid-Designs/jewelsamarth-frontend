@@ -32,7 +32,7 @@ const Collections = (productData) => {
                     />
                     {/* Hover Image */}
                     <img
-                        src={product.images[1]}
+                        src={product.images[1]||product.images[0]}
                         alt="Product Hover Image"
                         className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${hovered ? "opacity-100" : "opacity-0 scale-100"
                             }`}

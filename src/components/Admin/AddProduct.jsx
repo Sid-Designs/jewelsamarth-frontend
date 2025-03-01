@@ -12,7 +12,7 @@ const AddProduct = () => {
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [selectedSize, setSelectedSize] = useState(''); // This holds the selected size
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Silver');
   const [isTagDropdownOpen, setIsTagDropdownOpen] = useState(false);
   const [availableTags] = useState(['Fashion', 'Jewelry', 'Accessories', 'New Arrival', 'Sale']);
   const [isSizeDropdownOpen, setIsSizeDropdownOpen] = useState(false);
