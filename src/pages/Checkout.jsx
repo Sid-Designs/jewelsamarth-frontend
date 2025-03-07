@@ -26,7 +26,6 @@ const Checkout = () => {
         setFormData((prev) => ({ ...prev, [id]: value }));
     };
 
-    // Check if all required fields are filled
     const isFormComplete = Object.values(formData).every((value) => value.trim() !== '');
 
     return (

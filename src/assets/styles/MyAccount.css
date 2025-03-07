@@ -1,0 +1,83 @@
+button{
+    transition: all .2s ease-in-out;
+    user-select: none;
+}
+
+.btnshd{
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+}
+
+.formSec div input{
+    border-radius: 20px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease-in-out;
+}
+
+.formSec div input:focus{
+    box-shadow: none;
+}
+
+.ant-picker {
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    padding: 10px 15px;
+    border: none;
+}
+.ant-picker-outlined:hover{
+    border: none;
+}
+.ant-picker-outlined:focus-within{
+    box-shadow: none;
+    border: none;
+    background-color: rgb(250, 250, 250);
+}
+:where(.css-dev-only-do-not-override-1v613y0).ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before{
+    border: 1px solid var(--accent-color);
+}
+:where(.css-dev-only-do-not-override-1v613y0).ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected:not(.ant-picker-cell-disabled) .ant-picker-cell-inner, :where(.css-dev-only-do-not-override-1v613y0).ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-disabled) .ant-picker-cell-inner, :where(.css-dev-only-do-not-override-1v613y0).ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-disabled) .ant-picker-cell-inner{
+    color: var(--background-color);
+    background-color: var(--accent-color);
+}
+:where(.css-dev-only-do-not-override-1v613y0).ant-picker-dropdown .ant-picker-header-view >button:hover{
+    color: var(--accent-color);
+}
+
+.acntTabs{
+    border-radius: 20px;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+}
+
+.acntTabs:hover{
+    background-color: #f1f1f1;
+}
+
+.selected-tab{
+    background-color: #efefef;
+    color: var(--accent-color);
+    box-shadow: none;
+}
+.selected-tab:hover{
+    background-color: #f1f1f1!important;
+}
+
+.sideCntBorder{
+    border-left: 1px solid var(--accent-color);
+    margin-left: 4rem;
+}
+
+.sideCnt {
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+}
+
+.renComp{
+    width: 60%;
+    min-height: 500px;
+    height: 100%;
+}
+
+.container{
+    margin-top: 2rem;
+}

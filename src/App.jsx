@@ -17,6 +17,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Payment from './pages/Payment';
 import EditProduct from './pages/EditProduct';
+import MyAccount from './components/Account/MyAccount';
 
 const App = () => {
     const location = useLocation();
@@ -119,7 +120,7 @@ const App = () => {
                     />
                     <Route path="/products/:id/edit" element={
                         <PageTransition>
-                            <EditProduct/>
+                            <EditProduct />
                         </PageTransition>
                     }
                     />
@@ -141,6 +142,11 @@ const App = () => {
                         </PageTransition>
                     }
                     />
+                    <Route path="/account" element={
+                        <PageTransition>
+                            <MyAccount />
+                        </PageTransition>
+                    } />
                     <Route
                         path="*"
                         element={
