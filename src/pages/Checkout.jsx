@@ -127,11 +127,15 @@ const Checkout = () => {
                     </div>
 
                     {/* Checkout Button (Only Visible if Form is Complete) */}
-                    {isFormComplete && (
-                        <button className="w-full px-6 py-3 mt-6 bg-[var(--accent-color)] text-white text-lg font-semibold rounded-[20px] hover:bg-[var(--primary-color)] transition-all">
-                            Proceed to Checkout
-                        </button>
-                    )}
+                    <button
+                        className={`w-full px-6 py-3 mt-6 text-white text-lg font-semibold rounded-[20px] transition-all ${isFormComplete
+                            ? 'bg-[var(--accent-color)] hover:bg-[var(--primary-color)] opacity-100'
+                            : 'bg-[var(--accent-color)] opacity-70 cursor-not-allowed'
+                            }`}
+                        disabled={!isFormComplete}
+                    >
+                        Proceed to Checkout
+                    </button>
                 </div>
             </div>
         </>

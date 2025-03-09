@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 import {
   RotateCw,
   CircleHelp,
@@ -16,6 +17,7 @@ import "../assets/styles/SingleProduct.css";
 
 const SingleCollection = () => {
   const { id } = useParams();
+  const token = localStorage.getItem('token');
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mainImage, setMainImage] = useState("");
@@ -38,7 +40,7 @@ const SingleCollection = () => {
       } finally {
         setTimeout(() => {
           setLoading(false);
-        },1000)
+        }, 1000)
       }
     };
 
@@ -66,6 +68,20 @@ const SingleCollection = () => {
     setSubImages(newSubImages);
     setMainImage(clickedImage);
   };
+
+  const handleAddTocart = async () => {
+    // Add product to cart logic here
+    const decoded = jwtDecode(token);
+    const data = {
+      productId: id,
+      quantity: 1,
+      userId: decoded.id,
+    }
+    const res = await axios.post("http://localhost:5000/api/cart/add", data);
+    if (res) {
+      console.log(res.data)
+    }
+  }
 
   return (
     <div className="singleProd flex flex-col justify-center items-start px-8">
@@ -129,12 +145,12 @@ const SingleCollection = () => {
 
           {/* Add to Cart & Buy Now */}
           <div className="singleProdBtns flex w-[70%] my-4 px-4 pl-0">
-            <div className="addToCartBtn w-full text-center py-2 mx-4 ml-0">
+            <button className="addToCartBtn w-full text-center py-2 mx-4 ml-0" onClick={handleAddTocart}>
               Add To Cart
-            </div>
-            <div className="buyNowBtn w-full text-center py-2 mx-4">
+            </button>
+            <button className="buyNowBtn w-full text-center py-2 mx-4">
               Buy Now
-            </div>
+            </button>
           </div>
 
           {/* Info Section */}
