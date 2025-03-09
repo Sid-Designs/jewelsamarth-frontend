@@ -14,7 +14,7 @@ const Cart = () => {
                 if (token) {
                     const decodedToken = jwtDecode(token);
                     const data = { userId: decodedToken.id };
-                    const res = await axios.post("http://localhost:5000/api/cart/get", data);
+                    const res = await axios.post("https://api.jewelsamarth.in/api/cart/get", data);
                     setCartData(res.data.data);
                 } else {
                     console.error("Token not found");
