@@ -1,44 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 
 const Payments = () => {
-  const [payments, setPayments] = useState([
-    { heading: "Payments 1", text: "example@upi" }
-  ]);
+  const [payments, setPayments] = useState([]); // Start with an empty array
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [newHeading, setNewHeading] = useState("");
-  const [newUPIID, setNewUPIID] = useState("");
+  const [newHeading, setNewHeading] = useState('');
+  const [newUPIID, setNewUPIID] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState('');
 
-  const handleAddPayment = () => {
+  // Retrieve token, decode userId, and fetch user payment data
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const decodedToken = jwtDecode(token);
+          const userId = decodedToken.id;
+          setUserId(userId);
+
+          // Fetch user profile data including payments
+          const response = await axios.get(
+            `https://api.jewelsamarth.in/api/user/profile-data/${userId}`,
+          );
+
+          if (response.data && response.data.data && response.data.data.user.payments) {
+            setPayments(response.data.data.user.payments); // Update payments
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching payments:', error);
+      }
+    };
+
+    fetchPayments();
+  }, []);
+
+  const handleAddPayment = async () => {
     if (newHeading.trim() && newUPIID.trim()) {
-      const updatedPayments = [...payments, { heading: newHeading, text: newUPIID }];
-      setPayments(updatedPayments);
+      setLoading(true);
+      try {
+        const payload = {
+          userId,
+          paymentMethod: newHeading,
+          paymentDetails: newUPIID,
+        };
 
-      // Send to backend
-      console.log("Sending to backend:", updatedPayments);
-
-      // Close popup
-      setIsPopupOpen(false);
-      setNewHeading("");
-      setNewUPIID("");
+        const response = await axios.post(
+          'https://api.jewelsamarth.in/api/user/payments-update',
+          payload
+        );
+        console.log(response.data);
+        // Add the new payment to the state if the API call is successful
+        if (response.data.success) {
+          setPayments([...payments, { paymentMethod: newHeading, paymentDetails: newUPIID }]);
+        }
+      } catch (error) {
+        console.error('Error adding payment:', error);
+      } finally {
+        setLoading(false);
+        setIsPopupOpen(false);
+        setNewHeading('');
+        setNewUPIID('');
+      }
     }
   };
 
   return (
     <>
       {/* Display Existing Payments */}
-      {payments.map((payment, index) => (
-        <div
-          key={index}
-          className="flex justify-center items-center w-full py-12 sideCnt px-12 mb-8"
-        >
-          <div className="flex flex-col gap-4 w-full">
-            <div>
-              <h1 className="text-xl font-bold">{payment.heading}</h1>
-              <p className="py-4">{payment.text}</p>
+      <div className="payments-container">
+        {payments.length > 0 ? (
+          payments.map((payment, index) => (
+            <div
+              key={index}
+              className="flex justify-center items-center w-full py-12 sideCnt px-12 mb-8"
+            >
+              <div className="flex flex-col gap-4 w-full">
+                <div>
+                  <h1 className="text-xl font-bold">{payment.paymentMethod}</h1>
+                  <p className="py-4">{payment.paymentDetails}</p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      ))}
+          ))
+        ) : (
+          <p className="text-center">No payments found. Please add one!</p> // Show message when no payments are available
+        )}
+      </div>
 
       {/* Add Payment Button */}
       <button
@@ -55,36 +105,38 @@ const Payments = () => {
             <h2 className="text-xl font-bold mb-4">Add New Payment</h2>
             <form
               onSubmit={(e) => {
-                e.preventDefault(); // Prevent default form submission
+                e.preventDefault();
                 handleAddPayment();
               }}
             >
-              {/* Payment Method Name */}
+              {/* Payment Method Name Input */}
               <input
                 type="text"
                 value={newHeading}
                 maxLength={30}
                 onChange={(e) => setNewHeading(e.target.value)}
                 className="border w-full p-2 rounded mb-4"
-                placeholder="Enter Payment Method Name (e.g., UPI)"
-                required // Input must be filled
+                placeholder="Enter payment method name (e.g., UPI)"
+                required
               />
-
-              {/* UPI ID Input */}
+              {/* Payment Details Input */}
               <input
                 type="text"
                 value={newUPIID}
                 onChange={(e) => setNewUPIID(e.target.value)}
                 className="border w-full p-2 rounded mb-4"
                 placeholder="Enter UPI ID (e.g., example@upi)"
-                required // Input must be filled
+                required
               />
-
               <div className="flex justify-end gap-4">
                 {/* Cancel Button */}
                 <button
                   type="button"
-                  onClick={() => setIsPopupOpen(false)}
+                  onClick={() => {
+                    setIsPopupOpen(false);
+                    setNewHeading('');
+                    setNewUPIID('');
+                  }}
                   className="bg-gray-300 px-4 py-2 rounded"
                 >
                   Cancel
@@ -93,8 +145,9 @@ const Payments = () => {
                 <button
                   type="submit"
                   className="bg-[var(--accent-color)] text-white px-4 py-2 rounded hover:bg-[var(--primary-color)]"
+                  disabled={loading}
                 >
-                  Add
+                  {loading ? 'Adding...' : 'Add'}
                 </button>
               </div>
             </form>
