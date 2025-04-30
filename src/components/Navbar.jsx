@@ -14,17 +14,143 @@ import { IoLogIn } from "react-icons/io5";
 import { PiSealQuestionFill } from "react-icons/pi";
 import gsap from 'gsap'
 import MenuBar from './MenuBar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+import { AuthTabs } from './AuthTabs';
+import jwtDecode from 'jwt-decode';
 
 const Navbar = ({ loggedIn, onUserChange }) => {
     const [acntOpt, setacntOpt] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [showResults, setShowResults] = useState(false);
+    const [popUp, setPopUp] = useState(false);
     const [hoverTimeout, setHoverTimeout] = useState(null);
     const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
     const [submenuVisible, setSubmenuVisible] = useState('');
     const navigate = useNavigate();
     const [auth, setAuth] = useState(true);
+    const [formData, setFormData] = useState({ username: localStorage.getItem('username') || '', email: localStorage.getItem('email') || '', password: '' });
+    const [isLoading, setIsLoading] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [activeTab, setActiveTab] = useState("signup");
+    const location = useLocation();
+    const [isVisible, setIsVisible] = useState(false);
+    const [query, setQuery] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [userStatus, setUserStatus] = useState('user');
+
+    const fetchSuggestions = async (input) => {
+        try {
+            const response = await fetch(`https://api.jewelsamarth.in/api/product/search?q=${encodeURIComponent(input)}`);
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            setSuggestions(data.products);
+        } catch (error) {
+            console.error('Error fetching suggestions:', error);
+        }
+    };
+
+    let debounceTimeout;
+
+    const handleInputChange = (e) => {
+        const input = e.target.value;
+        setQuery(input);
+        clearTimeout(debounceTimeout);
+
+        debounceTimeout = setTimeout(() => {
+            if (input.length > 1) {
+                fetchSuggestions(input);
+            } else {
+                setSuggestions([]);
+            }
+        }, 300);
+    };
+
+    useEffect(() => {
+        if (popUp) {
+            setIsVisible(true);
+        } else {
+            setTimeout(() => setIsVisible(false), 300);
+        }
+    }, [popUp]);
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const tab = params.get('defaultTab');
+        if (tab && (tab === 'login' || tab === 'signup')) {
+            setActiveTab(tab);
+        }
+    }, [location]);
+
+    const handleForgetBtn = () => {
+        setPopUp(false);
+        navigate('/auth/reset-password')
+    }
+
+    const handleNewUser = async (event) => {
+        event.preventDefault();
+        setIsLoading(true);
+        setErrorMessage('');
+        try {
+            const res = await axios.post('https://api.jewelsamarth.in/api/auth/register', formData, { withCredentials: true });
+            if (res.data.success) {
+                localStorage.setItem('username', res.data.user.username);
+                localStorage.setItem('email', res.data.user.email);
+                localStorage.setItem('auth', res.data.user.isAccountVerified);
+                localStorage.setItem('token', res.data.token);
+                setShowSuccess(true);
+                onUserChange(true);
+                toast.success(res.data.message);
+                setPopUp(false);
+                setSearchParams('')
+                document.title = "Jewel Samarth | Silver Collections"
+            } else {
+                setErrorMessage(res.data.message);
+            }
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                setErrorMessage(error.response.data.message);
+            } else {
+                setErrorMessage('An error occurred. Please try again.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleExistUser = async (event) => {
+        event.preventDefault();
+        setIsLoading(true);
+        setErrorMessage('');
+        try {
+            const res = await axios.post('https://api.jewelsamarth.in/api/auth/login', formData, { withCredentials: true });
+            if (res.data.success) {
+                localStorage.setItem('username', res.data.username);
+                localStorage.setItem('email', res.data.email);
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('auth', res.data.auth);
+                setShowSuccess(true);
+                onUserChange(true);
+                toast.success(res.data.message);
+                setPopUp(false);
+                document.title = "Jewel Samarth | Silver Collections"
+            } else {
+                setErrorMessage(res.data.message);
+            }
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                setErrorMessage(error.response.data.message);
+            } else {
+                setErrorMessage('An error occurred. Please try again.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
         const checkUser = async () => {
@@ -38,6 +164,7 @@ const Navbar = ({ loggedIn, onUserChange }) => {
                         'x-auth-token': token,
                     },
                 });
+                setUserStatus(res.data.data.role);
                 setAuth(res.data.data.verified);
                 onUserChange(true);
             } catch (err) {
@@ -114,14 +241,59 @@ const Navbar = ({ loggedIn, onUserChange }) => {
         }
     }, [mobileMenuVisible]);
 
+    const handlePopupShell = (e) => {
+        e.stopPropagation()
+        const targetValue = e.target.getAttribute("value");
+        if (targetValue === "Close") {
+            setPopUp(false);
+            setSearchParams('')
+            document.title = "Jewel Samarth | Silver Collections"
+        }
+    }
+
+
     return (
         <>
             <nav className='py-[0.7rem] px-[1rem] md:px-[2rem] lg:px-[4rem] xl:pr-[2rem]'>
-                <div className="navSearch w-1/4 lg:1/3 flex justify-start items-center">
+                <div className="navSearch w-1/4 lg:1/3 flex justify-start items-center relative">
                     <div className='searchField w-[100%] hidden md:flex justify-start lg:justify-center items-center'>
-                        <input type="text" placeholder='Products Search . . .' className='searchBox' />
+                        <input
+                            type="text"
+                            placeholder='Products Search . . .'
+                            value={query}
+                            onChange={handleInputChange}
+                            onFocus={() => setShowResults(true)} // Show results on focus
+                            onBlur={() => setTimeout(() => setShowResults(false), 200)} // Hide after slight delay
+                            className='searchBox'
+                        />
                         <CiSearch className='searchIcon' />
                     </div>
+
+                    {/* Only show when input is focused AND there are suggestions */}
+                    {showResults && suggestions.length > 0 && (
+                        <ul className='custmShadow absolute top-full left-0 z-50 bg-white rounded-[20px] mt-1 w-full max-h-96 overflow-y-auto transition-all duration-300 ease-in-out'>
+                            {suggestions.map((item) => (
+                                <li key={item._id} className='border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors transform transition-transform duration-200
+                        hover:scale-[1.01]'>
+                                    <a href={`/products/${item._id}`} className='flex items-center p-3 gap-3'>
+                                        <div className='flex-shrink-0 w-12 h-12 rounded-[5px] overflow-hidden bg-gray-100'>
+                                            <img
+                                                src={item.images}
+                                                alt={item.name}
+                                                className='w-full h-full object-cover rounded-[5px]'
+                                                loading='lazy'
+                                            />
+                                        </div>
+                                        <div className='flex-1 min-w-0'>
+                                            <p className='font-medium text-gray-900 truncate'>{item.name}</p>
+                                            <p className='text-sm text-gray-500'>{item.productCategory}</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+
                     <div className='flex ml-2 justify-center items-center md:hidden'>
                         <MenuBar mobileMenuVisible={mobileMenuVisible} setMobileMenuVisible={setMobileMenuVisible} />
                     </div>
@@ -147,14 +319,14 @@ const Navbar = ({ loggedIn, onUserChange }) => {
                                     className={`acntOpt ${acntOpt ? 'block' : 'hidden'}`}
                                 >
                                     <li className='flex justify-start items-center gap-[10px]'>
-                                        <NavLink to="/dashboard" className='flex justify-start items-center gap-[10px]'>
+                                        <NavLink to={userStatus == 'admin' ? '/dashboard' : '/account'} className='flex justify-start items-center gap-[10px]'>
                                             <MdDashboard />Dashboard
                                         </NavLink>
                                     </li>
                                     {!auth && (
                                         <li onClick={handleEmail} className='flex justify-start items-center gap-[10px]'><MdMarkEmailRead />Verify Email</li>
                                     )}
-                                    <li className='flex justify-start items-center gap-[10px]'><FaBox />Orders</li>
+                                    <li className='flex justify-start items-center gap-[10px]'onClick={() => navigate('/account?view=orders')}><FaBox />Orders</li>
                                     <li className="flex justify-start items-center gap-[10px]" onClick={handleLogout}><RiLogoutBoxFill />LogOut</li>
                                 </ul>
                             </div>
@@ -162,17 +334,17 @@ const Navbar = ({ loggedIn, onUserChange }) => {
                             <div
                                 onMouseEnter={handleMouseEnter}
                                 onMouseLeave={handleMouseLeave}
-                                onClick={() => setacntOpt(!acntOpt)}
+                                onClick={() => { setacntOpt(!acntOpt); setPopUp(!popUp) }}
                             >
-                                <NavLink to="/auth?defaultTab=signup" className={`acntBtn p-2 ${acntOpt && 'acntDes'} mx-2 hidden md:flex xl:mr-6`}>
+                                <div to="/auth?defaultTab=signup" className={`acntBtn p-2 mx-2 hidden md:flex xl:mr-6`}>
                                     <VscAccount className='icons acntIcon' /><span className='text-nowrap hidden md:flex capitalize'>Sign In</span>
-                                </NavLink>
+                                </div>
                             </div>
                         )}
-                        <div className='p-2 relative'>
+                        <NavLink to="/cart" className='p-2 relative'>
                             <GiShoppingBag className='icons shopBag' />
                             <div className="bagVal">10</div>
-                        </div>
+                        </NavLink>
                     </div>
                 </div>
                 <div className={`mobileMenu ${mobileMenuVisible ? 'translate-x-0%' : 'translate-x-[-100%]'}`}>
@@ -212,6 +384,30 @@ const Navbar = ({ loggedIn, onUserChange }) => {
             <div className='hidden md:flex justify-center items-center'>
                 <MegaMenu />
             </div>
+            {(popUp || isVisible) && (
+                <div
+                    className={`authPopup fixed inset-0 z-50 flex justify-center items-center transition-opacity duration-300
+      ${popUp ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                    onClick={() => setPopUp(false)}
+                >
+                    <div
+                        value="Close"
+                        className="flex justify-center items-center relative dark:bg-black w-full h-full shadow-lg transition-all duration-300 scale-100 bg-black/50 backdrop-blur-sm"
+                        onClick={(e) => handlePopupShell(e)}
+                    >
+                        <AuthTabs
+                            formData={formData}
+                            setFormData={setFormData}
+                            signUp={handleNewUser}
+                            logIn={handleExistUser}
+                            defaultActiveTab={activeTab}
+                            isLoading={isLoading}
+                            errorMessage={errorMessage}
+                            handleForgetBtn={handleForgetBtn}
+                        />
+                    </div>
+                </div>
+            )}
         </>
     );
 };
@@ -220,6 +416,7 @@ const Navbar = ({ loggedIn, onUserChange }) => {
 const MegaMenu = () => {
     const [submenuVisible, setSubmenuVisible] = useState('');
     const [hoverTimeout, setHoverTimeout] = useState(null);
+    const navigate = useNavigate();
 
     const handleMouseEnter = (id, menu) => {
         if (hoverTimeout) {
@@ -255,10 +452,17 @@ const MegaMenu = () => {
         }
     };
 
+    const sendToPage = (e) => {
+        if (e.target.innerHTML === "Home") {
+            navigate('/')
+        }
+        navigate(`/collections/${e.target.dataset.value}`)
+    };
+
     return (
         <div className='megaMenu'>
             <ul>
-                <li><span className="menu-item-text">Home</span></li>
+                <li onClick={(e) => sendToPage(e)}><span className="menu-item-text">Home</span></li>
                 <li
                     onMouseEnter={() => handleMouseEnter('shop-submenu', 'shop')}
                     onMouseLeave={() => handleMouseLeave('shop-submenu')}
@@ -272,37 +476,37 @@ const MegaMenu = () => {
                         <div className='flex megaShop'>
                             <ul className='menuSec'>
                                 <h1>Jewellery</h1>
-                                <li><span className="menu-item-text">New Arrivals</span></li>
-                                <li><span className="menu-item-text">Men's Jewelry</span></li>
-                                <li><span className="menu-item-text">Women's Jewelry</span></li>
-                                <li><span className="menu-item-text">Kid's Jewelry</span></li>
-                                <li><span className="menu-item-text">Chain & Necklace</span></li>
-                                <li><span className="menu-item-text">Bangle & Bracelet</span></li>
-                                <li><span className="menu-item-text">Personalized</span></li>
+                                <li><span className="menu-item-text" onClick={() => navigate("/shop")}>New Arrivals</span></li>
+                                <li><span className="menu-item-text" data-value="men" onClick={(e) => sendToPage(e)}>Men's Jewelry</span></li>
+                                <li><span className="menu-item-text" data-value="women" onClick={(e) => sendToPage(e)}>Women's Jewelry</span></li>
+                                <li><span className="menu-item-text" data-value="unisex" onClick={(e) => sendToPage(e)}>Kid's Jewelry</span></li>
+                                <li><span className="menu-item-text" data-value="pendant" onClick={(e) => sendToPage(e)}>Chain & Necklace</span></li>
+                                <li><span className="menu-item-text" data-value="bracelet" onClick={(e) => sendToPage(e)}>Bangle & Bracelet</span></li>
+                                <li><span className="menu-item-text" data-value="all" onClick={(e) => sendToPage(e)}>Personalized</span></li>
                             </ul>
                             <ul className='menuSec'>
                                 <h1>Silver</h1>
-                                <li><span className="menu-item-text">Ring</span></li>
-                                <li><span className="menu-item-text">Earring</span></li>
-                                <li><span className="menu-item-text">Pendant</span></li>
-                                <li><span className="menu-item-text">Necklace</span></li>
-                                <li><span className="menu-item-text">Bracelet</span></li>
-                                <li><span className="menu-item-text">Nose Pin</span></li>
-                                <li><span className="menu-item-text">Cuff Link</span></li>
+                                <li><span className="menu-item-text" data-value="silver+ring" onClick={(e) => sendToPage(e)}>Ring</span></li>
+                                <li><span className="menu-item-text" data-value="silver+earring" onClick={(e) => sendToPage(e)}>Earring</span></li>
+                                <li><span className="menu-item-text" data-value="silver+pendant" onClick={(e) => sendToPage(e)}>Pendant</span></li>
+                                {/* <li><span className="menu-item-text" data-value="men" onClick={(e) => sendToPage(e)}>Necklace</span></li> */}
+                                <li><span className="menu-item-text" data-value="silver+bracelet" onClick={(e) => sendToPage(e)}>Bracelet</span></li>
+                                <li><span className="menu-item-text" data-value="silver+nose+pin" onClick={(e) => sendToPage(e)}>Nose Pin</span></li>
+                                <li><span className="menu-item-text" data-value="silver+cufflink" onClick={(e) => sendToPage(e)}>Cuff Link</span></li>
                             </ul>
                             <ul className='menuSec'>
                                 <h1>Pearl</h1>
-                                <li><span className="menu-item-text">Earring</span></li>
-                                <li><span className="menu-item-text">Pendant</span></li>
-                                <li><span className="menu-item-text">Bracelets</span></li>
+                                <li><span className="menu-item-text" data-value="pearl+earring" onClick={(e) => sendToPage(e)}>Earring</span></li>
+                                <li><span className="menu-item-text" data-value="pendant" onClick={(e) => sendToPage(e)}>Pendant</span></li>
+                                <li><span className="menu-item-text" data-value="bracelet" onClick={(e) => sendToPage(e)}>Bracelets</span></li>
                             </ul>
                             <ul className='menuSec'>
                                 <h1>Gemstone</h1>
-                                <li><span className="menu-item-text">Ring</span></li>
-                                <li><span className="menu-item-text">Earring</span></li>
-                                <li><span className="menu-item-text">Pendant</span></li>
-                                <li><span className="menu-item-text">Nose Pin</span></li>
-                                <li><span className="menu-item-text">Rudraksh</span></li>
+                                <li><span className="menu-item-text" data-value="gemstone" onClick={(e) => sendToPage(e)}>Ring</span></li>
+                                {/* <li><span className="menu-item-text" >Earring</span></li> */}
+                                {/* <li><span className="menu-item-text" >Pendant</span></li> */}
+                                {/* <li><span className="menu-item-text" >Nose Pin</span></li> */}
+                                {/* <li><span className="menu-item-text" >Rudraksh</span></li> */}
                             </ul>
                         </div>
                     </div>
@@ -318,15 +522,15 @@ const MegaMenu = () => {
                     </div>
                     <div id='silver-submenu' className='submenu'>
                         <ul>
-                            <li><span className="menu-item-text">Silver Anklet</span></li>
-                            <li><span className="menu-item-text">Silver Band</span></li>
-                            <li><span className="menu-item-text">Silver Bracelet</span></li>
-                            <li><span className="menu-item-text">Silver Cufflink</span></li>
-                            <li><span className="menu-item-text">Silver Rings</span></li>
-                            <li><span className="menu-item-text">Silver Earings</span></li>
-                            <li><span className="menu-item-text">Silver Mangalsutra</span></li>
-                            <li><span className="menu-item-text">Silver Pendant</span></li>
-                            <li><span className="menu-item-text">Silver Nose Pin</span></li>
+                            {/* <li><span className="menu-item-text">Silver Anklet</span></li> */}
+                            <li><span className="menu-item-text" data-value="silver+band" onClick={(e) => sendToPage(e)}>Silver Band</span></li>
+                            <li><span className="menu-item-text" data-value="silver+bracelet" onClick={(e) => sendToPage(e)}>Silver Bracelet</span></li>
+                            <li><span className="menu-item-text" data-value="silver+cufflink" onClick={(e) => sendToPage(e)}>Silver Cufflink</span></li>
+                            <li><span className="menu-item-text" data-value="silver+ring" onClick={(e) => sendToPage(e)}>Silver Rings</span></li>
+                            <li><span className="menu-item-text" data-value="silver+earring" onClick={(e) => sendToPage(e)}>Silver Earings</span></li>
+                            <li><span className="menu-item-text" data-value="silver+mangalsutra" onClick={(e) => sendToPage(e)}>Silver Mangalsutra</span></li>
+                            <li><span className="menu-item-text" data-value="silver+pendant" onClick={(e) => sendToPage(e)}>Silver Pendant</span></li>
+                            <li><span className="menu-item-text" data-value="silver+nose+pin" onClick={(e) => sendToPage(e)}>Silver Nose Pin</span></li>
                         </ul>
                     </div>
                 </li>
@@ -341,9 +545,9 @@ const MegaMenu = () => {
                     </div>
                     <div id='pearl-submenu' className='submenu'>
                         <ul>
-                            <li><span className="menu-item-text">Pearl Bracelet</span></li>
-                            <li><span className="menu-item-text">Pearl Earrings</span></li>
-                            <li><span className="menu-item-text">Pearl Pendant</span></li>
+                            <li><span className="menu-item-text" data-value="pearl+bracelet" onClick={(e) => sendToPage(e)}>Pearl Bracelet</span></li>
+                            <li><span className="menu-item-text" data-value="pearl+earring" onClick={(e) => sendToPage(e)}>Pearl Earrings</span></li>
+                            <li><span className="menu-item-text" data-value="pearl+pendant" onClick={(e) => sendToPage(e)}>Pearl Pendant</span></li>
                         </ul>
                     </div>
                 </li>
@@ -358,11 +562,11 @@ const MegaMenu = () => {
                     </div>
                     <div id='gemstone-submenu' className='submenu'>
                         <ul>
-                            <li><span className="menu-item-text">Gemstone Ring</span></li>
+                            <li><span className="menu-item-text" data-value="gemstone" onClick={(e) => sendToPage(e)}>Gemstone Ring</span></li>
                         </ul>
                     </div>
                 </li>
-                <li><span className="menu-item-text">Rudraksh</span></li>
+                <li><span className="menu-item-text" data-value="rudraksh" onClick={(e) => sendToPage(e)}>Rudraksh</span></li>
             </ul>
         </div>
     );

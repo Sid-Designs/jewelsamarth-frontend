@@ -1,0 +1,32 @@
+.cupnBox{
+    border-radius: 20px 0 0 20px;
+}
+.cupnBtn{
+    border-radius: 0 20px 20px 0;
+    color: #fff;
+}
+.cartItem::-webkit-scrollbar-track, .cartItem::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+}
+.orderSum{
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+}
+.payBtnOpt{
+    border-radius: 20px!important;
+}
+.cartItem{
+    height: fit-content;
+    max-height: 320px;
+}
+.cartImg{
+    width: 20%;
+    height: fit-content;
+}
+@media screen and (max-width: 640px) {
+    .cartImg{
+        width: 100%;
+        height: fit-content;
+    }
+    
+}

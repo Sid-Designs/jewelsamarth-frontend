@@ -33,6 +33,21 @@
   cursor: grab;
 }
 
+img{
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@media screen and (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 0px!important;
+    height: 0px;
+  }
+  ::-webkit-scrollbar-track {
+    border: none;
+  }
+}
+
 @layer base {
   :root {
     --chart-1: 44 98% 61%; 

@@ -93,7 +93,19 @@ const EmailVerification = () => {
       <Helmet>
         <title>Email Verification | Jewel Samarth</title>
       </Helmet>
-      <div className="w-[90%] max-w-[400px] mx-auto my-16">
+      <div className="flex justify-center items-center h-full mt-14 mb-2">
+        <div className='authTabMainCnt'>
+          <div className='p-4 hidden lg:flex'>
+            <div className='authTabImg'>
+              <img
+                className='object-cover h-full w-full'
+                src="https://plus.unsplash.com/premium_photo-1674255466849-b23fc5f5d3eb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8amV3ZWxlcnl8ZW58MHx8MHx8fDA%3D"
+                alt="Auth Visual"
+              />
+            </div>
+          </div>
+          <div className='authMiddleLine my-12 mx-4 hidden lg:flex'></div>
+      <div className="w-[90%] min-w-[350px] max-w-[400px] mx-auto my-16">
         <Card className="card mt-4">
           <form onSubmit={isOtpSent ? handleVerifyOtp : handleSendOtp}>
             <CardHeader>
@@ -129,6 +141,8 @@ const EmailVerification = () => {
             </CardFooter>
           </form>
         </Card>
+      </div>
+      </div>
       </div>
       <ToastContainer
         position="bottom-right"

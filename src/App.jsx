@@ -14,10 +14,12 @@ import axios from 'axios';
 import CategoryPage from './pages/CollectionsPage';
 import SingleCollection from './components/SingleCollection';
 import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
+import CheckoutPage from './pages/CheckoutPage';
 import Payment from './pages/Payment';
 import EditProduct from './pages/EditProduct';
 import MyAccount from './components/Account/MyAccount';
+import OrderComplete from './pages/OrderComplete';
+import ShopPage from './pages/ShopPage';
 
 const App = () => {
     const location = useLocation();
@@ -96,19 +98,25 @@ const App = () => {
                     <Route
                         path="/dashboard"
                         element={
-                            // <ProtectedRoute requiredRole="admin">
-                            //     <PageTransition>
-                            //         <Dashboard />
-                            //     </PageTransition>
-                            // </ProtectedRoute>
-                            <PageTransition>
-                                <Dashboard />
-                            </PageTransition>
+                            <ProtectedRoute requiredRole="admin">
+                                <PageTransition>
+                                    <Dashboard />
+                                </PageTransition>
+                            </ProtectedRoute>
+                            // <PageTransition>
+                            //     <Dashboard />
+                            // </PageTransition>
                         }
                     />
                     <Route path="/collections/:collectionName" element={
                         <PageTransition>
                             <CategoryPage />
+                        </PageTransition>
+                    }
+                    />
+                    <Route path="/shop" element={
+                        <PageTransition>
+                            <ShopPage />
                         </PageTransition>
                     }
                     />
@@ -132,13 +140,19 @@ const App = () => {
                     />
                     <Route path="/checkout" element={
                         <PageTransition>
-                            <Checkout />
+                            <CheckoutPage />
                         </PageTransition>
                     }
                     />
                     <Route path="/payment" element={
                         <PageTransition>
                             <Payment />
+                        </PageTransition>
+                    }
+                    />
+                    <Route path="/order/:orderId" element={
+                        <PageTransition>
+                            <OrderComplete />
                         </PageTransition>
                     }
                     />

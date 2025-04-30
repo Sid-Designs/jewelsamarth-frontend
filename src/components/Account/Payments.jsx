@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import { Plus, X, Edit2, Trash2, CreditCard } from 'lucide-react';
 
 const Payments = () => {
-  const [payments, setPayments] = useState([]); // Start with an empty array
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [newHeading, setNewHeading] = useState('');
-  const [newUPIID, setNewUPIID] = useState('');
+  const [payments, setPayments] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    _id: '',
+    paymentMethod: '',
+    paymentDetails: ''
+  });
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState('');
+  const [editingId, setEditingId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [paymentToDelete, setPaymentToDelete] = useState(null);
 
-  // Retrieve token, decode userId, and fetch user payment data
+  // Fetch user payments
   useEffect(() => {
     const fetchPayments = async () => {
       try {
@@ -20,13 +27,12 @@ const Payments = () => {
           const userId = decodedToken.id;
           setUserId(userId);
 
-          // Fetch user profile data including payments
           const response = await axios.get(
             `https://api.jewelsamarth.in/api/user/profile-data/${userId}`,
           );
 
-          if (response.data && response.data.data && response.data.data.user.payments) {
-            setPayments(response.data.data.user.payments); // Update payments
+          if (response.data?.data?.user?.payments) {
+            setPayments(response.data.data.user.payments);
           }
         }
       } catch (error) {
@@ -37,124 +43,306 @@ const Payments = () => {
     fetchPayments();
   }, []);
 
-  const handleAddPayment = async () => {
-    if (newHeading.trim() && newUPIID.trim()) {
-      setLoading(true);
-      try {
-        const payload = {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.paymentMethod.trim() || !formData.paymentDetails.trim()) return;
+
+    setLoading(true);
+    try {
+      if (editingId) {
+        // UPDATE PAYMENT
+        const updatePayload = {
           userId,
-          paymentMethod: newHeading,
-          paymentDetails: newUPIID,
+          paymentId: formData._id,
+          paymentDetails: formData.paymentDetails
+        };
+
+        const response = await axios.put(
+          'https://api.jewelsamarth.in/api/user/payment-update',
+          updatePayload,
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (response.data.success) {
+          setPayments(payments.map(payment => 
+            payment._id === formData._id ? {
+              ...payment,
+              paymentDetails: formData.paymentDetails
+            } : payment
+          ));
+          resetForm();
+        }
+      } else {
+        // ADD NEW PAYMENT
+        const addPayload = {
+          userId,
+          paymentMethod: formData.paymentMethod,
+          paymentDetails: formData.paymentDetails
         };
 
         const response = await axios.post(
-          'https://api.jewelsamarth.in/api/user/payments-update',
-          payload
+          'https://api.jewelsamarth.in/api/user/payments-add',
+          addPayload
         );
-        console.log(response.data);
-        // Add the new payment to the state if the API call is successful
+
         if (response.data.success) {
-          setPayments([...payments, { paymentMethod: newHeading, paymentDetails: newUPIID }]);
+          const updatedResponse = await axios.get(
+            `https://api.jewelsamarth.in/api/user/profile-data/${userId}`,
+          );
+          setPayments(updatedResponse.data.data.user.payments || []);
+          resetForm();
         }
-      } catch (error) {
-        console.error('Error adding payment:', error);
-      } finally {
-        setLoading(false);
-        setIsPopupOpen(false);
-        setNewHeading('');
-        setNewUPIID('');
       }
+    } catch (error) {
+      console.error('Error saving payment:', error.response?.data || error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  const resetForm = () => {
+    setFormData({
+      _id: '',
+      paymentMethod: '',
+      paymentDetails: ''
+    });
+    setEditingId(null);
+    setIsModalOpen(false);
+  };
+
+  const handleEdit = (payment) => {
+    setFormData({
+      _id: payment._id,
+      paymentMethod: payment.paymentMethod,
+      paymentDetails: payment.paymentDetails
+    });
+    setEditingId(payment._id);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = (payment) => {
+    setPaymentToDelete(payment);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!paymentToDelete) return;
+    
+    try {
+      await axios.delete('https://api.jewelsamarth.in/api/user/payment-delete', {
+        data: {
+          userId,
+          paymentId: paymentToDelete._id
+        }
+      });
+
+      const response = await axios.get(
+        `https://api.jewelsamarth.in/api/user/profile-data/${userId}`,
+      );
+      setPayments(response.data.data.user.payments || []);
+    } catch (error) {
+      console.error('Error deleting payment:', error);
+    } finally {
+      setDeleteModalOpen(false);
+      setPaymentToDelete(null);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setPaymentToDelete(null);
+  };
+
   return (
-    <>
-      {/* Display Existing Payments */}
-      <div className="payments-container">
-        {payments.length > 0 ? (
-          payments.map((payment, index) => (
-            <div
-              key={index}
-              className="flex justify-center items-center w-full py-12 sideCnt px-12 mb-8"
-            >
-              <div className="flex flex-col gap-4 w-full">
-                <div>
-                  <h1 className="text-xl font-bold">{payment.paymentMethod}</h1>
-                  <p className="py-4">{payment.paymentDetails}</p>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-center">No payments found. Please add one!</p> // Show message when no payments are available
-        )}
+    <div className="max-w-4xl mx-auto p-4 md:p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">Payment Methods</h1>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-2 bg-[var(--primary-color)] hover:bg-[var(--accent-color)] text-white px-4 py-2 rounded-[20px] transition-colors"
+        >
+          <Plus size={18} />
+          Add New Payment
+        </button>
       </div>
 
-      {/* Add Payment Button */}
-      <button
-        onClick={() => setIsPopupOpen(true)}
-        className="w-fit btnshd bg-[var(--accent-color)] text-[var(--background-color)] px-4 py-2 rounded-[20px] hover:bg-[var(--primary-color)]"
-      >
-        Add Payment
-      </button>
-
-      {/* Popup for Adding Payment */}
-      {isPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-bold mb-4">Add New Payment</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleAddPayment();
-              }}
+      {payments.length === 0 ? (
+        <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-[20px]">
+          <CreditCard size={48} className="mx-auto text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium text-gray-700 mb-2">No Saved Payment Methods</h3>
+          <p className="text-gray-500 mb-4">You haven't added any payment methods yet</p>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-[var(--primary-color)] hover:bg-[var(--accent-color)] text-white px-6 py-2 rounded-[20px]"
+          >
+            Add Your First Payment Method
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {payments.map((payment) => (
+            <div
+              key={payment._id}
+              className="border border-gray-200 rounded-[20px] p-5 relative"
             >
-              {/* Payment Method Name Input */}
-              <input
-                type="text"
-                value={newHeading}
-                maxLength={30}
-                onChange={(e) => setNewHeading(e.target.value)}
-                className="border w-full p-2 rounded mb-4"
-                placeholder="Enter payment method name (e.g., UPI)"
-                required
-              />
-              {/* Payment Details Input */}
-              <input
-                type="text"
-                value={newUPIID}
-                onChange={(e) => setNewUPIID(e.target.value)}
-                className="border w-full p-2 rounded mb-4"
-                placeholder="Enter UPI ID (e.g., example@upi)"
-                required
-              />
-              <div className="flex justify-end gap-4">
-                {/* Cancel Button */}
+              <div className="flex justify-between items-start mb-2">
+                <h2 className="font-bold text-lg flex items-center gap-2">
+                  <CreditCard size={18} className="text-[var(--primary-color)]" />
+                  {payment.paymentMethod}
+                </h2>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleEdit(payment)}
+                    className="text-gray-500 hover:text-[var(--primary-color)] p-1"
+                    aria-label="Edit payment"
+                  >
+                    <Edit2 size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClick(payment)}
+                    className="text-gray-500 hover:text-red-500 p-1"
+                    aria-label="Delete payment"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+              <p className="text-gray-700 mb-4 whitespace-pre-line">{payment.paymentDetails}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Add/Edit Payment Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-[20px] shadow-xl w-full max-w-md">
+            <div className="flex justify-between items-center border-b p-4">
+              <h2 className="text-xl font-bold">
+                {editingId ? 'Edit Payment Method' : 'Add New Payment Method'}
+              </h2>
+              <button
+                onClick={resetForm}
+                className="text-gray-500 hover:text-gray-700"
+                aria-label="Close modal"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <form onSubmit={handleSubmit} className="p-6">
+              <div className="mb-4">
+                <label htmlFor="paymentMethod" className="block text-sm font-medium text-gray-700 mb-1">
+                  Payment Method (e.g., Credit Card, UPI)
+                </label>
+                <input
+                  type="text"
+                  id="paymentMethod"
+                  name="paymentMethod"
+                  value={formData.paymentMethod}
+                  onChange={handleInputChange}
+                  className={`w-full p-3 border border-gray-300 rounded-[20px] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent ${
+                    editingId ? 'bg-gray-100 cursor-not-allowed' : ''
+                  }`}
+                  placeholder="Enter payment method name"
+                  required
+                  disabled={!!editingId}
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="paymentDetails" className="block text-sm font-medium text-gray-700 mb-1">
+                  Payment Details
+                </label>
+                <textarea
+                  id="paymentDetails"
+                  name="paymentDetails"
+                  value={formData.paymentDetails}
+                  onChange={handleInputChange}
+                  className="w-full p-3 border border-gray-300 rounded-[20px] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
+                  rows="4"
+                  placeholder="Enter payment details"
+                  required
+                ></textarea>
+              </div>
+              <div className="flex justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsPopupOpen(false);
-                    setNewHeading('');
-                    setNewUPIID('');
-                  }}
-                  className="bg-gray-300 px-4 py-2 rounded"
+                  onClick={resetForm}
+                  className="px-4 py-2 border border-gray-300 rounded-[20px] hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
-                {/* Submit Button */}
                 <button
                   type="submit"
-                  className="bg-[var(--accent-color)] text-white px-4 py-2 rounded hover:bg-[var(--primary-color)]"
                   disabled={loading}
+                  className="px-4 py-2 bg-[var(--primary-color)] text-white rounded-[20px] hover:bg-[var(--accent-color)] transition-colors disabled:opacity-70"
                 >
-                  {loading ? 'Adding...' : 'Add'}
+                  {loading ? (
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {editingId ? 'Updating...' : 'Adding...'}
+                    </span>
+                  ) : (
+                    <span>{editingId ? 'Update Payment' : 'Add Payment'}</span>
+                  )}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-    </>
+
+      {/* Delete Confirmation Modal */}
+      {deleteModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-[20px] shadow-xl w-full max-w-md">
+            <div className="flex justify-between items-center border-b p-4">
+              <h2 className="text-xl font-bold">Delete Payment Method</h2>
+              <button
+                onClick={handleDeleteCancel}
+                className="text-gray-500 hover:text-gray-700"
+                aria-label="Close modal"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-6">
+              <p className="text-gray-700 mb-6">
+                Are you sure you want to delete the {paymentToDelete?.paymentMethod} payment method?
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={handleDeleteCancel}
+                  className="px-4 py-2 border border-gray-300 rounded-[20px] hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteConfirm}
+                  className="px-4 py-2 bg-red-500 text-white rounded-[20px] hover:bg-red-600 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -1,0 +1,8 @@
+.orderItemSec::-webkit-scrollbar-thumb, .orderItemSec::-webkit-scrollbar-track{
+    border-radius: 20px;
+}
+
+.container{
+    padding-top: 10px;
+    padding-bottom: 5px;
+}

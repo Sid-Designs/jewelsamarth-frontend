@@ -11,7 +11,7 @@ const AuthPage = ({ onUserChange }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [activeTab, setActiveTab] = useState("login");
+    const [activeTab, setActiveTab] = useState("signup");
     const navigate = useNavigate();
     const location = useLocation();
 

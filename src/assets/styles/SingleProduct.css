@@ -1,3 +1,5 @@
+/* ---------- Product Image Styles ---------- */
+
 .singleSubProdImg li {
   background-color: #f1f1f1;
   height: 80px;
@@ -5,6 +7,7 @@
   cursor: pointer;
   border-radius: 20px;
   box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+  margin-top: 2px;
 }
 
 .singleProdImg {
@@ -14,7 +17,6 @@
 .singleMainProdImg {
   background-color: #f1f1f1;
   border-radius: 20px;
-  /* box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15); */
 }
 
 .singleMainProdImg img {
@@ -24,53 +26,215 @@
   width: 100%;
 }
 
+/* ---------- Pincode Section ---------- */
+
 .singleProdPincode input {
   border-radius: 20px;
   box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
-.singleProdPincode input:focus{
-    box-shadow: none;
+.singleProdPincode input:focus {
+  box-shadow: none;
 }
 
-.singleProdPincode button{
-    background-color: var(--accent-color);
-    color: var(--background-color);
-    border-radius: 20px;
-    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
-    transition: all .2s ease-out;
+.singleProdPincode button {
+  background-color: var(--accent-color);
+  color: var(--background-color);
+  border-radius: 20px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease-out;
 }
 
-.singleProdPincode button:hover, .addToCartBtn:hover, .buyNowBtn:hover{
-    box-shadow: none;
+/* ---------- Feature Box ---------- */
+
+.singleProdFeature {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  user-select: none;
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.15);
 }
 
-.addToCartBtn{
-    background-color: var(--accent-color);
-    color: var(--background-color);
-    font-size: medium;
-    border-radius: 20px;
-    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    transition: all .2s ease-out;
-    /* border-radius: 20px 0px 0px 20px; */
+/* ---------- Buttons ---------- */
+
+.addToCartBtn,
+.buyNowBtn {
+  flex: 1;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  text-align: center;
 }
 
-.buyNowBtn{
-    background-color: var(--primary-color);
-    color: var(--accent-color);
-    font-size: medium;
-    border-radius: 20px;
-    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    transition: all .2s ease-out;
-    /* border-radius: 0px 20px 20px 0px; */
+.addToCartBtn {
+  background-color: var(--accent-color);
+  color: var(--background-color);
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+}
+
+.buyNowBtn {
+  background-color: var(--primary-color);
+  color: var(--accent-color);
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+}
+
+.addToCartBtn:hover,
+.buyNowBtn:hover,
+.singleProdPincode button:hover {
+  box-shadow: none;
+}
+
+/* ---------- Add to Cart Animation ---------- */
+
+.cart-button {
+  position: relative;
+  height: 50px;
+  width: 100%;
+  border-radius: 20px;
+  background-color: #060675;
+  color: #fffefc;
+  overflow: hidden;
+  transition: 0.3s ease-in-out;
+}
+
+.cart-button:hover {
+  background-color: rgb(29, 29, 150);
+}
+
+.cart-button .fa-shopping-cart {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: -10%;
+  font-size: 1.5em;
+  transform: translate(-50%, -50%);
+}
+
+.cart-button .fa-box {
+  position: absolute;
+  z-index: 3;
+  top: -20%;
+  left: 52%;
+  font-size: 0.7em;
+  transform: translate(-50%, -50%);
+  color: #fffefc;
+}
+
+.cart-button span {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  font-size: 1.2em;
+  color: #fff;
+  transform: translate(-50%, -50%);
+}
+
+.cart-button span.add-to-cart {
+  opacity: 1;
+}
+
+.cart-button span.added {
+  opacity: 0;
+}
+
+.cart-button.clicked .fa-shopping-cart {
+  animation: cart 1.5s ease-in-out forwards;
+}
+
+.cart-button.clicked .fa-box {
+  animation: box 1.5s ease-in-out forwards;
+}
+
+.cart-button.clicked span.add-to-cart {
+  animation: txt1 1.5s ease-in-out forwards;
+}
+
+.cart-button.clicked span.added {
+  animation: txt2 1.5s ease-in-out forwards;
+}
+
+@keyframes cart {
+  0% { left: -10%; }
+  40%, 60% { left: 50%; }
+  100% { left: 110%; }
+}
+
+@keyframes box {
+  0%, 40% { top: -20%; }
+  60% { top: 40%; left: 52%; }
+  100% { top: 40%; left: 112%; }
+}
+
+@keyframes txt1 {
+  0% { opacity: 1; }
+  20%, 100% { opacity: 0; }
+}
+
+@keyframes txt2 {
+  0%, 80% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* ---------- Layout + Responsiveness ---------- */
+
+.singleProdBtns-container {
+  /* width: 100%; */
+}
+
+.singleProdBtns {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 1rem auto;
+  padding: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .singleProd {
+    padding-bottom: 80px; /* space for floating buttons */
   }
-  
-  .singleProdFeature{
-    background-color: #f1f1f1;
-    border-radius: 10px;
-    user-select: none;
-    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.15);
+
+  .singleMainProdImg img {
+    width: 100%;
+    height: auto;
+  }
+
+  .singleSubProdImg li{
+    width: 65px;
+    height: 65px;
+  }
+
+  .singleSubProdImg {
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 1rem;
+  }
+
+  .singleProdBtns-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .singleProdBtns {
+    flex-direction: row;
+    gap: 0.75rem;
+    padding: 0;
+    margin: 0;
+  }
+  .addToCartBtn,
+  .buyNowBtn {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
 }

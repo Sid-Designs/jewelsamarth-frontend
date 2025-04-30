@@ -100,50 +100,93 @@ const ResetPassword = () => {
       <Helmet>
         <title>Reset Password | Jewel Samarth</title>
       </Helmet>
-      <div className="w-[90%] max-w-[400px] mx-auto my-16">
-        <Card className="card mt-4">
-          <form onSubmit={!isOtpSent ? handleSendOtp : isOtpValid ? handleSubmitNewPassword : handleVerifyOtp}>
-            <CardHeader>
-              <CardTitle className="formHeadText text-2xl">Reset Password</CardTitle>
-              <CardDescription>
-                {!isOtpSent
-                  ? "Enter your email address to reset your password."
-                  : !isOtpValid
-                    ? "Enter the OTP sent to your email address."
-                    : "Enter your new password."}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1 authInput">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" value={email} placeholder="Your email address" onChange={handleEmailChange} required disabled={isOtpSent} />
-              </div>
-              {isOtpSent && !isOtpValid && (
-                <div className="space-y-1 authInput">
-                  <Label htmlFor="otp">OTP</Label>
-                  <InputOTP value={otp} onChange={handleOtpChange} maxLength={6} className="input-otp">
-                    <InputOTPGroup>
-                      {Array.from({ length: 6 }).map((_, idx) => (
-                        <InputOTPSlot key={idx} index={idx} />
-                      ))}
-                    </InputOTPGroup>
-                  </InputOTP>
-                </div>
-              )}
-              {isOtpValid && (
-                <div className="space-y-1 authInput">
-                  <Label htmlFor="newPassword">New Password</Label>
-                  <Input id="newPassword" type="password" value={newPassword} placeholder="Enter your new password" onChange={handlePasswordChange} required />
-                </div>
-              )}
-            </CardContent>
-            <CardFooter>
-              <Button type="submit" className="submitBtn" disabled={isLoading || (isOtpSent && !isOtpComplete && !isOtpValid)}>
-                {isLoading ? 'Processing...' : (!isOtpSent ? 'Send OTP' : (!isOtpValid ? 'Verify OTP' : 'Set New Password'))}
-              </Button>
-            </CardFooter>
-          </form>
-        </Card>
+      <div className="flex justify-center items-center h-full mt-14 mb-2">
+        <div className='authTabMainCnt'>
+          <div className='p-4 hidden lg:flex'>
+            <div className='authTabImg'>
+              <img
+                className='object-cover h-full w-full'
+                src="https://plus.unsplash.com/premium_photo-1674255466849-b23fc5f5d3eb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8amV3ZWxlcnl8ZW58MHx8MHx8fDA%3D"
+                alt="Auth Visual"
+              />
+            </div>
+          </div>
+          <div className='authMiddleLine my-12 mx-4 hidden lg:flex'></div>
+          <div className="w-[90%] min-w-[350px] max-w-[400px] mx-auto my-16">
+            <Card className="card mt-4">
+              <form onSubmit={!isOtpSent ? handleSendOtp : isOtpValid ? handleSubmitNewPassword : handleVerifyOtp}>
+                <CardHeader>
+                  <CardTitle className="formHeadText text-2xl">
+                  {!isOtpSent
+                      ? <>Let's Restore Your Shine!<br /> Reset your access to brilliance.</>
+                      : !isOtpValid
+                        ? "Enter OTP to unlock brilliance and rediscover treasure."
+                        : "Craft a new password to unlock your brilliance."}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="space-y-1 authInput">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      placeholder="Your email address"
+                      onChange={handleEmailChange}
+                      required
+                      disabled={isOtpSent}
+                    />
+                  </div>
+
+                  {isOtpSent && !isOtpValid && (
+                    <div className="space-y-1 authInput">
+                      <Label htmlFor="otp">OTP</Label>
+                      <InputOTP value={otp} onChange={handleOtpChange} maxLength={6} className="input-otp">
+                        <InputOTPGroup>
+                          {Array.from({ length: 6 }).map((_, idx) => (
+                            <InputOTPSlot key={idx} index={idx} />
+                          ))}
+                        </InputOTPGroup>
+                      </InputOTP>
+                    </div>
+                  )}
+
+                  {isOtpValid && (
+                    <div className="space-y-1 authInput">
+                      <Label htmlFor="newPassword">New Password</Label>
+                      <Input
+                        id="newPassword"
+                        type="password"
+                        value={newPassword}
+                        placeholder="Enter your new password"
+                        onChange={handlePasswordChange}
+                        required
+                      />
+                    </div>
+                  )}
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    type="submit"
+                    className="submitBtn"
+                    disabled={
+                      isLoading ||
+                      (isOtpSent && !isOtpValid && !isOtpComplete)
+                    }
+                  >
+                    {isLoading
+                      ? 'Processing...'
+                      : !isOtpSent
+                        ? 'Send OTP'
+                        : !isOtpValid
+                          ? 'Verify OTP'
+                          : 'Set New Password'}
+                  </Button>
+                </CardFooter>
+              </form>
+            </Card>
+          </div>
+        </div>
       </div>
       <ToastContainer
         position="bottom-right"

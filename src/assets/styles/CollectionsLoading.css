@@ -1,0 +1,32 @@
+.clcImg {
+  height: 350px;
+}
+.prodLoadCnt {
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+}
+@media screen and (max-width: 768px) {
+    .clcImg {
+        height: 200px;
+    }
+    .prodLoadCnt {
+        height: 300px;
+    }
+    
+}
+@media screen and (max-width: 640px) {
+    .prodLoadCnt {
+        height: fit-content;
+        width: 40%;
+    }   
+}
+@media screen and (max-width: 449px) {
+    .prodLoadCnt {
+        width: 60%;
+    }   
+}
+@media screen and (max-width: 299px) {
+    .prodLoadCnt {
+        width: 90%;
+    }   
+}

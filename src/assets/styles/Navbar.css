@@ -330,3 +330,23 @@ nav {
     opacity: 1;
   }
 }
+
+.authPopup{
+  height: 100vh;
+  width: 100%;
+  z-index: 1000;
+}
+.authPopupCloseBtn{
+  background-color: #ffffff99;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+}
+
+.custmShadow{
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15), 0 6px 12px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+}
+
+.custmShadow::-webkit-scrollbar-track, .custmShadow::-webkit-scrollbar-thumb {
+ display: none;
+}
