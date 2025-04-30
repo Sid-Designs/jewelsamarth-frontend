@@ -29,7 +29,7 @@ const Orders = () => {
         // 1. Fetch orders
         const ordersResponse = await axios({
           method: 'post',
-          url: 'https://localhost:5000/api/order/details',
+          url: 'https://api.jewelsamarth.in/api/order/details',
           data: { userId },
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -55,7 +55,7 @@ const Orders = () => {
           uniqueProductIds.map(async (productId) => {
             try {
               const productResponse = await axios.get(
-                `http://localhost:5000/api/product/${productId}`
+                `https://api.jewelsamarth.in/api/product/${productId}`
               );
               if (productResponse.data.product) {
                 productDetailsMap[productId] = productResponse.data.product;

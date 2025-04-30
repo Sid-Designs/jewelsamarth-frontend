@@ -64,7 +64,7 @@ const SingleCollection = () => {
         quantity: 1,
         userId: decoded.id,
       }
-      const res = await axios.post("http://localhost:5000/api/cart/add", data)
+      const res = await axios.post("https://api.jewelsamarth.in/api/cart/add", data)
       if (res) toast.success(res.data.message)
     } catch {
       toast.error("Failed to add product to cart")
@@ -78,7 +78,7 @@ const SingleCollection = () => {
       return
     }
     try {
-      const response = await axios.post("http://localhost:5000/api/pincode/check", { pincode })
+      const response = await axios.post("https://api.jewelsamarth.in/api/pincode/check", { pincode })
       if (response.data.success) {
         setPincodeStatus(true);
         setPincodeMessage("Delivery is available in your area. 🎉", response.data);
