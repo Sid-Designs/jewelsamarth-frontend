@@ -42,13 +42,13 @@ const CheckoutPage = () => {
 
   // Form data state
   const [formData, setFormData] = useState({
-    firstName: "Sid",
-    lastName: "M",
-    phone: "9876543211",
-    pincode: "400012",
-    address: "asdf",
-    city: "asdf",
-    state: "asdf",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    pincode: "",
+    address: "",
+    city: "",
+    state: "",
   })
 
   // Fetch cart data
