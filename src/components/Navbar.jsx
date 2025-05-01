@@ -326,7 +326,7 @@ const Navbar = ({ loggedIn, onUserChange }) => {
                                     {!auth && (
                                         <li onClick={handleEmail} className='flex justify-start items-center gap-[10px]'><MdMarkEmailRead />Verify Email</li>
                                     )}
-                                    <li className='flex justify-start items-center gap-[10px]'onClick={() => navigate('/account?view=orders')}><FaBox />Orders</li>
+                                    <li className='flex justify-start items-center gap-[10px]' onClick={() => navigate('/account?view=orders')}><FaBox />Orders</li>
                                     <li className="flex justify-start items-center gap-[10px]" onClick={handleLogout}><RiLogoutBoxFill />LogOut</li>
                                 </ul>
                             </div>
@@ -343,7 +343,7 @@ const Navbar = ({ loggedIn, onUserChange }) => {
                         )}
                         <NavLink to="/cart" className='p-2 relative'>
                             <GiShoppingBag className='icons shopBag' />
-                            <div className="bagVal">10</div>
+                            {/* <div className="bagVal">10</div> */}
                         </NavLink>
                     </div>
                 </div>
