@@ -148,7 +148,7 @@ const EditProduct = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(
-                `http://localhost:5000/api/product/update/${id}`,
+                `https://api.jewelsamarth.in/api/product/update/${id}`,
                 productData,
                 {
                     headers: {

@@ -62,7 +62,7 @@ export default function OrdersTable() {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        "http://localhost:5000/api/order/change-status",
+        "https://api.jewelsamarth.in/api/order/change-status",
         { 
           orderId,
           status: newStatus.toLowerCase() 
@@ -87,7 +87,7 @@ export default function OrdersTable() {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.delete(
-        `http://localhost:5000/api/order/delete/${orderId}`,
+        `https://api.jewelsamarth.in/api/order/delete/${orderId}`,
         { headers: { 'x-auth-token': token } }
       );
       setOrders(orders.filter(order => order._id !== orderId));
