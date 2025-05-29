@@ -22,11 +22,11 @@ const Collections = ({ productData }) => {
         const response = await axios.get(
           `https://api.jewelsamarth.in/api/wishlist/${decoded.id}`
         );
-        
+
         const isProductWishlisted = response.data.some(
           item => item.productId._id === productData._id
         );
-        
+
         setIsWishlisted(isProductWishlisted);
       } catch (error) {
         console.error("Error checking wishlist status:", error);
@@ -159,7 +159,7 @@ const Collections = ({ productData }) => {
               color: "var(--primary-color)",
               scale: isWishlisted ? [0.8, 1.1, 1] : 0,
             }}
-            transition={{ 
+            transition={{
               duration: 0.5,
               scale: { type: "spring", stiffness: 300, damping: 15 }
             }}
@@ -207,16 +207,14 @@ const Collections = ({ productData }) => {
           <img
             src={productData.images[0]}
             alt="Product"
-            className={`bg-[#efefef] absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${
-              hovered ? "opacity-0" : "opacity-100"
-            }`}
+            className={`bg-[#efefef] absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${hovered ? "opacity-0" : "opacity-100"
+              }`}
           />
           <img
             src={productData.subImages[1] || productData.images[0]}
             alt="Product Hover"
-            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${
-              hovered ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${hovered ? "opacity-100" : "opacity-0"
+              }`}
           />
         </div>
       </a>
@@ -241,19 +239,20 @@ const Collections = ({ productData }) => {
         </a>
 
         {/* Add to Cart Button */}
+
         <button
           onClick={handleAddToCart}
-          className={`${
-            clicked ? "clicked" : ""
-          } w-full bg-[var(--accent-color)] text-white py-2 mt-3 rounded-[20px] font-semibold hover:bg-[var(--primary-color)] transition-all relative overflow-hidden`}
+          aria-label="Add to Cart"
+          className={`${clicked ? "clicked" : ""
+            } addToCartBtn cart-button text-sm sm:text-base mt-3`}
         >
-          <span className={`add-to-cart ${clicked ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}>
-            Add to cart
-          </span>
-          <span className={`added absolute inset-0 flex justify-center items-center ${clicked ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}>
+          <span className="add-to-cart">Add to cart</span>
+          <span className="added flex justify-center items-center">
             <FaCheck className="mr-2 text-[var(--primary-color)]" />
             Added
           </span>
+          <i className="fas fa-shopping-cart"></i>
+          <i className="fas fa-box"></i>
         </button>
       </div>
 

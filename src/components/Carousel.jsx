@@ -17,8 +17,7 @@ const Carousel = () => {
       // title: "Summer Collection",
       // subtitle: "Fresh styles for sunny days",
       buttonText: "Shop Summer",
-      path: "/summer-collection", // For React Router
-      // link: "https://example.com/summer", // For anchor tags
+      path: "/shop", // For React Router
       buttonPosition: "summer-center", // New top-center position
       buttonClass: "bg-[#03853e] text-white" // Custom button style
     },
@@ -27,7 +26,7 @@ const Carousel = () => {
       title: "Finest Jewelry Collection",
       subtitle: "Elegant pieces for every occasion",
       buttonText: "Browse Jewelry",
-      path: "/jewelry",
+      path: "/collections/silver",
       buttonPosition: "center",
       buttonClass: "bg-[#e5e5e5] text-black"
     },
@@ -36,7 +35,7 @@ const Carousel = () => {
       // title: "Astrology Inspired",
       // subtitle: "Find your zodiac perfect match",
       buttonText: "Discover Now",
-      path: "/astrology",
+      path: "/collections/astrological+ring",
       buttonPosition: "bottom-right",
       buttonClass: "bg-[var(--accent-color)] text-white"
     }

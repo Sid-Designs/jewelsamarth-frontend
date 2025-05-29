@@ -20,6 +20,7 @@ import EditProduct from './pages/EditProduct';
 import MyAccount from './components/Account/MyAccount';
 import OrderComplete from './pages/OrderComplete';
 import ShopPage from './pages/ShopPage';
+import Error from './pages/Error';
 
 const App = () => {
     const location = useLocation();
@@ -165,7 +166,7 @@ const App = () => {
                         path="*"
                         element={
                             <PageTransition>
-                                <h1>Error</h1>
+                                <Error />
                             </PageTransition>
                         }
                     />

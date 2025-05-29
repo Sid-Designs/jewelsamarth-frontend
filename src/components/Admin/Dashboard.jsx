@@ -370,7 +370,7 @@ const Dashboard = () => {
         <TabsContent value="settings">
           <div className="bg-white rounded-[20px] shadow-sm p-6 border border-gray-100">
             <h2 className="text-xl font-semibold mb-4">Settings Panel</h2>
-            <p>Manage your store settings here.</p>
+            <p>Coupons setting comming soon....</p>
           </div>
         </TabsContent>
       </Tabs>

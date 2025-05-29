@@ -25,7 +25,6 @@ const chartConfig = {
   }
 }
 
-// Custom tooltip component to show ₹ symbol
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
@@ -67,15 +66,14 @@ export default function MonthlyProfitChart() {
   const getLastNMonths = (n = 6) => {
     const months = []
     const date = new Date()
+    date.setDate(1) // Set to first day of month to avoid month skipping issues
     
-    // Start from the current month
-    date.setMonth(date.getMonth() + 1) // Start from next month initially
-    
-    for (let i = 0; i < n; i++) {
-      date.setMonth(date.getMonth() - 1) // Move back one month
-      const monthName = date.toLocaleString('default', { month: 'long' })
-      const year = date.getFullYear()
-      months.unshift({
+    for (let i = n - 1; i >= 0; i--) {
+      const tempDate = new Date(date)
+      tempDate.setMonth(date.getMonth() - i)
+      const monthName = tempDate.toLocaleString('default', { month: 'long' })
+      const year = tempDate.getFullYear()
+      months.push({
         name: monthName,
         year: year,
         key: `${monthName}-${year}`
@@ -90,8 +88,8 @@ export default function MonthlyProfitChart() {
     const monthlyProfit = {}
 
     // Initialize all months with 0 profit
-    last6Months.forEach(({ name, year }) => {
-      monthlyProfit[`${name}-${year}`] = 0
+    last6Months.forEach(({ key }) => {
+      monthlyProfit[key] = 0
     })
 
     // Calculate profit for each order
