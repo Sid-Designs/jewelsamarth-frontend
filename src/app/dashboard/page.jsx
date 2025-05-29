@@ -13,6 +13,8 @@ import Products from "@/components/Admin/Products";
 import AddProduct from "@/components/Admin/AddProduct";
 import ProductCategories from "@/components/Admin/ProductCategories";
 import ProductTags from "@/components/Admin/ProductTags";
+import PowerBI from "@/components/Admin/PowerBI";
+import Coupons from "@/components/Admin/Coupons";
 
 export default function Page() {
   const [selectedComponent, setSelectedComponent] = useState("Dashboard");
@@ -36,6 +38,10 @@ export default function Page() {
         return <ProductCategories />; 
       case "Tags":
         return <ProductTags />; 
+      case "PowerBI":
+        return <PowerBI />; 
+      case "Coupons":
+        return <Coupons />;
       default:
         return <Dashboard />;
     }

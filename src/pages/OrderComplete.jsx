@@ -138,8 +138,8 @@ const OrderComplete = () => {
 
                                         <div>
                                             <h4 className="font-semibold">Shipping Address:</h4>
-                                            <p className="text-gray-700">
-                                                123 Green Valley Lane Springfield, Illinois, 62704 United States
+                                            <p className="text-gray-700 capitalize">    
+                                                {orderDtl?.order?.address}
                                             </p>
                                         </div>
 

@@ -462,7 +462,7 @@ const MegaMenu = () => {
     return (
         <div className='megaMenu'>
             <ul>
-                <li onClick={(e) => sendToPage(e)}><span className="menu-item-text">Home</span></li>
+                <li onClick={() => navigate('/')}><span className="menu-item-text">Home</span></li>
                 <li
                     onMouseEnter={() => handleMouseEnter('shop-submenu', 'shop')}
                     onMouseLeave={() => handleMouseLeave('shop-submenu')}
@@ -485,7 +485,7 @@ const MegaMenu = () => {
                                 <li><span className="menu-item-text" data-value="all" onClick={(e) => sendToPage(e)}>Personalized</span></li>
                             </ul>
                             <ul className='menuSec'>
-                                <h1>Silver</h1>
+                                <h1 onClick={() => navigate('/collections/silver')}>Silver</h1>
                                 <li><span className="menu-item-text" data-value="silver+ring" onClick={(e) => sendToPage(e)}>Ring</span></li>
                                 <li><span className="menu-item-text" data-value="silver+earring" onClick={(e) => sendToPage(e)}>Earring</span></li>
                                 <li><span className="menu-item-text" data-value="silver+pendant" onClick={(e) => sendToPage(e)}>Pendant</span></li>
@@ -495,13 +495,13 @@ const MegaMenu = () => {
                                 <li><span className="menu-item-text" data-value="silver+cufflink" onClick={(e) => sendToPage(e)}>Cuff Link</span></li>
                             </ul>
                             <ul className='menuSec'>
-                                <h1>Pearl</h1>
+                                <h1 onClick={() => navigate('/collections/pearl')}>Pearl</h1>
                                 <li><span className="menu-item-text" data-value="pearl+earring" onClick={(e) => sendToPage(e)}>Earring</span></li>
                                 <li><span className="menu-item-text" data-value="pendant" onClick={(e) => sendToPage(e)}>Pendant</span></li>
                                 <li><span className="menu-item-text" data-value="bracelet" onClick={(e) => sendToPage(e)}>Bracelets</span></li>
                             </ul>
                             <ul className='menuSec'>
-                                <h1>Gemstone</h1>
+                                <h1 onClick={() => navigate('/collections/gemstone')}>Gemstone</h1>
                                 <li><span className="menu-item-text" data-value="gemstone" onClick={(e) => sendToPage(e)}>Ring</span></li>
                                 {/* <li><span className="menu-item-text" >Earring</span></li> */}
                                 {/* <li><span className="menu-item-text" >Pendant</span></li> */}

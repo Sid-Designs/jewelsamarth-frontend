@@ -97,7 +97,7 @@ const CollectionsFilter = ({ onFiltersChange, onSortChange }) => {
   };
 
   const renderFilterDropdown = (category) => (
-    <div className="absolute left-0 top-full bg-white shadow-lg px-2 py-1 mt-2 w-48 border rounded-[20px] animate-dropdown-in z-10">
+    <div className="absolute left-0 top-full bg-white shadow-lg px-2 py-1 mt-2 w-48 border rounded-[20px] animate-dropdown-in z-50">
       {filterOptions[category].map((option) => {
         const selected = filters[category].includes(option);
         return (
@@ -120,7 +120,7 @@ const CollectionsFilter = ({ onFiltersChange, onSortChange }) => {
   );
 
   const renderSortDropdown = () => (
-    <div className="absolute z-40 right-0 top-full bg-white shadow-lg p-3 mt-2 w-48 border rounded-[20px] animate-dropdown-in">
+    <div className="absolute z-50 right-0 top-full bg-white shadow-lg p-3 mt-2 w-48 border rounded-[20px] animate-dropdown-in">
       {sortOptions.map((option) => (
         <div
           key={option}

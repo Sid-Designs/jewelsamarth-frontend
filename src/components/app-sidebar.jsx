@@ -23,6 +23,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import PowerBI from "./Admin/PowerBI";
 
 // This is sample data.
 const data = {
@@ -65,19 +66,26 @@ const data = {
       items: [],
     },
     {
-      title: "Sales",
+      title: "Coupons",
       url: "#",
-      icon: PieChart,
-      componentName: "Sales", // Add this property
+      icon: Settings2,
+      componentName: "Coupons", // Add this property
       items: [],
     },
-    {
-      title: "Posts",
-      url: "#",
-      icon: BookOpen,
-      componentName: "Posts", // Add this property
-      items: [],
-    },
+    // {
+    //   title: "Sales",
+    //   url: "#",
+    //   icon: PieChart,
+    //   componentName: "Sales", // Add this property
+    //   items: [],
+    // },
+    // {
+    //   title: "Posts",
+    //   url: "#",
+    //   icon: BookOpen,
+    //   componentName: "Posts", // Add this property
+    //   items: [],
+    // },
     {
       title: "Products",
       icon: Package,
@@ -99,6 +107,12 @@ const data = {
           componentName: "Tags"
         },
       ],
+    },
+    {
+      title: "Power BI",
+      url: "#",
+      icon: BookOpen,
+      componentName: "PowerBI", 
     },
   ],
   projects: [

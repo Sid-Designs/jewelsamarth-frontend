@@ -9,6 +9,8 @@ import Profile from "./Profile";
 import Orders from "./Orders";
 import Addresses from "./Addresses";
 import Payments from "./Payments";
+import Whishlist from "./Whishlist";
+import Logout from "./Logout";
 import '@/assets/styles/MyAccount.css';
 
 // Component Constants
@@ -17,8 +19,8 @@ const COMPONENTS = {
   orders: <Orders />,
   addresses: <Addresses />,
   payments: <Payments />,
-  wishlist: <div className="min-h-[400px]"><p>Your wishlist items will appear here.</p></div>,
-  logout: <div className="min-h-[400px]"><p>Logging out...</p></div>,
+  wishlist: <Whishlist />,
+  logout: <Logout/>,
 };
 
 const MyAccount = () => {

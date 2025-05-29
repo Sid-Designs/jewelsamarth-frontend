@@ -18,7 +18,7 @@ const ScrollAnimation = () => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   const items = [
-    { name: "All Category", image: logo, link: "/products" },
+    { name: "All Category", image: logo, link: "/shop" },
     { name: "Earrings", image: "https://res.cloudinary.com/dplww7z06/image/upload/v1740409930/emv1w7tgzqk2czaxemix.jpg", link: "/collections/earring" },
     { name: "Rings", image: "https://res.cloudinary.com/dplww7z06/image/upload/v1741189529/gptksx8htaozaqzevzcs.jpg", link: "/collections/ring" },
     { name: "Pendant", image: "https://res.cloudinary.com/dplww7z06/image/upload/v1740411760/k2ba34tohgz2lpcthrzd.jpg", link: "/collections/pendant" },

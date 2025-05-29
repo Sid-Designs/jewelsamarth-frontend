@@ -56,7 +56,7 @@ const SingleCollection = () => {
   // Memoized average rating calculation
   const averageRating = useMemo(() => {
     if (!reviews || reviews.length === 0) return 0;
-    
+
     const { sum, count } = reviews.reduce(
       (acc, review) => {
         if (review && typeof review.rating === 'number') {
@@ -92,7 +92,7 @@ const SingleCollection = () => {
 
         // Fetch reviews data
         const reviewsResponse = await axios.get(
-          `https://api.jewelsamrth.in/api/review/product/${id}`
+          `https://api.jewelsamarth.in/api/review/product/${id}`
         );
         const reviewsData = reviewsResponse.data.reviews || [];
         setReviews(reviewsData);
@@ -103,7 +103,7 @@ const SingleCollection = () => {
           userIds.map(async (userId) => {
             try {
               const userResponse = await axios.get(
-                `https://api.jewelsamrth.in/api/user/${userId}`
+                `https://api.jewelsamarth.in/api/user/${userId}`
               );
               if (userResponse.data.success) {
                 setUserNames((prev) => ({
@@ -139,7 +139,7 @@ const SingleCollection = () => {
       toast.error("Please log in to add items to cart");
       return;
     }
-    
+
     try {
       setClicked(true);
       const decoded = jwtDecode(token);
@@ -156,6 +156,75 @@ const SingleCollection = () => {
     } catch (error) {
       toast.error("Failed to add product to cart");
       setClicked(false);
+    }
+  };
+
+  const handleBuyNow = async () => {
+    // Check if user is logged in
+    if (!token) {
+      toast.error("Please log in to buy now");
+      // Optional: Redirect to login with return URL
+      // window.location.href = `/login?returnUrl=${encodeURIComponent(window.location.pathname)}`;
+      return;
+    }
+
+    try {
+      // Decode token safely
+      let userId;
+      try {
+        const decoded = jwtDecode(token);
+        userId = decoded?.id;
+        if (!userId) throw new Error("Invalid token");
+      } catch (decodeError) {
+        toast.error("Session expired. Please log in again.");
+        // Clear invalid token
+        localStorage.removeItem('token');
+        return;
+      }
+
+      const requestData = {
+        productId: id, // Make sure 'id' is defined in your scope
+        quantity: 1,   // You might want to make this dynamic
+        userId: userId,
+      };
+
+      // Show loading state
+      const loadingToast = toast.loading("Processing your order...");
+
+      const response = await axios.post(
+        "https://api.jewelsamarth.in/api/cart/buy-now",
+        requestData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          timeout: 10000 // 10 second timeout
+        }
+      );
+
+      toast.dismiss(loadingToast);
+
+      if (response.data.success) {
+        // Redirect to payment page
+        window.location.href = response.data.redirectUrl || '/checkout';
+      } else {
+        toast.error(response.data.message || "Failed to proceed with purchase");
+      }
+    } catch (error) {
+      console.error("Error during buy now:", error);
+
+      // Handle specific error cases
+      if (error.response) {
+        // Server responded with error status
+        toast.error(error.response.data.message || "Failed to process your request");
+      } else if (error.request) {
+        // Request was made but no response
+        toast.error("Network error. Please check your connection.");
+      } else {
+        // Other errors
+        toast.error("Failed to proceed with purchase");
+      }
     }
   };
 
@@ -216,13 +285,13 @@ const SingleCollection = () => {
           name: userNames[decoded.id] || "Anonymous"
         };
 
-        setReviews(reviews.map(review => 
+        setReviews(reviews.map(review =>
           review._id === editingReviewId ? updatedReview : review
         ));
 
         // API call after state update for faster UI response
         const response = await axios.put(
-          "https://api.jewelsamrth.in/api/review/update",
+          "https://api.jewelsamarth.in/api/review/update",
           {
             userId: decoded.id,
             productId: id,
@@ -254,7 +323,7 @@ const SingleCollection = () => {
 
         // API call after state update for faster UI response
         const response = await axios.post(
-          "https://api.jewelsamrth.in/api/review/add",
+          "https://api.jewelsamarth.in/api/review/add",
           {
             userId: decoded.id,
             productId: id,
@@ -291,7 +360,7 @@ const SingleCollection = () => {
         // Try to get the original review back (simplified approach)
         const originalReview = reviews.find(r => r._id === editingReviewId);
         if (originalReview) {
-          setReviews(reviews.map(r => 
+          setReviews(reviews.map(r =>
             r._id === editingReviewId ? originalReview : r
           ));
         }
@@ -332,9 +401,9 @@ const SingleCollection = () => {
     try {
       // Optimistic update
       setReviews(reviews.filter(review => review._id !== reviewId));
-      
+
       const decoded = jwtDecode(token);
-      await axios.delete("https://api.jewelsamrth.in/api/review/delete", {
+      await axios.delete("https://api.jewelsamarth.in/api/review/delete", {
         data: {
           userId: decoded.id,
           reviewId: reviewId,
@@ -450,9 +519,8 @@ const SingleCollection = () => {
           <div className="flex items-center gap-2">
             <span className="text-sm sm:text-md">Availability:</span>
             <span
-              className={`text-xs sm:text-sm ${
-                product.stock > 0 ? "text-green-700" : "text-red-700"
-              }`}
+              className={`text-xs sm:text-sm ${product.stock > 0 ? "text-green-700" : "text-red-700"
+                }`}
             >
               {product.stock > 0 ? "In Stock" : "Out of Stock"}
             </span>
@@ -492,9 +560,8 @@ const SingleCollection = () => {
               <button
                 onClick={handleAddTocart}
                 aria-label="Add to Cart"
-                className={`${
-                  clicked ? "clicked" : ""
-                } addToCartBtn cart-button text-sm sm:text-base`}
+                className={`${clicked ? "clicked" : ""
+                  } addToCartBtn cart-button text-sm sm:text-base`}
               >
                 <span className="add-to-cart">Add to cart</span>
                 <span className="added flex justify-center items-center">
@@ -504,7 +571,7 @@ const SingleCollection = () => {
                 <i className="fas fa-shopping-cart"></i>
                 <i className="fas fa-box"></i>
               </button>
-              <button className="buyNowBtn text-sm sm:text-base">Buy Now</button>
+              <button onClick={handleBuyNow} className="buyNowBtn text-sm sm:text-base">Buy Now</button>
             </div>
           </div>
 
@@ -558,9 +625,8 @@ const SingleCollection = () => {
         <div className="relative flex justify-center items-center gap-4 sm:gap-8 text-lg sm:text-xl py-3 pb-0 border-b">
           {/* Description Tab */}
           <div
-            className={`cursor-pointer px-2 sm:px-4 py-1 sm:py-2 relative text-sm sm:text-base md:text-lg ${
-              activeTab === "description" ? "text-[var(--accent-color)]" : ""
-            }`}
+            className={`cursor-pointer px-2 sm:px-4 py-1 sm:py-2 relative text-sm sm:text-base md:text-lg ${activeTab === "description" ? "text-[var(--accent-color)]" : ""
+              }`}
             onClick={() => setActiveTab("description")}
           >
             Description
@@ -568,9 +634,8 @@ const SingleCollection = () => {
 
           {/* Reviews Tab */}
           <div
-            className={`cursor-pointer px-2 sm:px-4 py-1 sm:py-2 relative text-sm sm:text-base md:text-lg ${
-              activeTab === "reviews" ? "text-[var(--accent-color)]" : ""
-            }`}
+            className={`cursor-pointer px-2 sm:px-4 py-1 sm:py-2 relative text-sm sm:text-base md:text-lg ${activeTab === "reviews" ? "text-[var(--accent-color)]" : ""
+              }`}
             onClick={() => setActiveTab("reviews")}
           >
             Reviews {reviews.length > 0 && `(${reviews.length})`}
@@ -610,11 +675,11 @@ const SingleCollection = () => {
                     {reviews.map((review) => review && (
                       <div
                         key={review._id}
-                        className="bg-[#f8f8f8] p-6 rounded-[20px] shadow-sm relative"
+                        className="bg-[#f8f8f8] p-4 rounded-[20px] shadow-sm relative"
                       >
                         {/* Edit/Delete buttons for the review owner */}
                         {currentUserId && review.userId && currentUserId === review.userId && (
-                          <div className="absolute top-4 right-4 flex gap-2">
+                          <div className="absolute bottom-0 mb-4 right-4 flex gap-2">
                             <button
                               onClick={() => handleEditReview(review)}
                               className="text-gray-500 hover:text-[var(--accent-color)] transition-colors"
@@ -631,7 +696,7 @@ const SingleCollection = () => {
                             </button>
                           </div>
                         )}
-                        <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <div className="flex">
                               {[1, 2, 3, 4, 5].map((star) => (
@@ -665,7 +730,7 @@ const SingleCollection = () => {
                           {review.review || review.comment || "No comment provided"}
                         </p>
                         <p className="text-sm font-medium text-[var(--accent-color)]">
-                          - {(review.userId && userNames[review.userId]) || review.userId || "Anonymous"}
+                          - {(userNames[review.userId]) || review.userId || "Anonymous"}
                           {console.log(review)}
                         </p>
                       </div>
@@ -689,8 +754,8 @@ const SingleCollection = () => {
                   {editingReviewId
                     ? "Edit Your Review"
                     : userReview
-                    ? "Update Your Review"
-                    : "Write a Review"}
+                      ? "Update Your Review"
+                      : "Write a Review"}
                 </h3>
                 {(!userReview || editingReviewId) ? (
                   <form onSubmit={handleSubmitReview} className="space-y-4">
@@ -748,8 +813,8 @@ const SingleCollection = () => {
                         {isReviewLoading
                           ? "Submitting..."
                           : editingReviewId
-                          ? "Update Review"
-                          : "Submit Review"}
+                            ? "Update Review"
+                            : "Submit Review"}
                       </button>
                       {editingReviewId && (
                         <button
@@ -761,7 +826,7 @@ const SingleCollection = () => {
                         </button>
                       )}
                     </div>
-                    
+
                     {!token && (
                       <p className="text-sm text-red-500 mt-2">
                         Please log in to submit a review

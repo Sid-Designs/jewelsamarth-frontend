@@ -16,6 +16,7 @@ const Payments = () => {
   const [editingId, setEditingId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [paymentToDelete, setPaymentToDelete] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Fetch user payments
   useEffect(() => {
@@ -37,6 +38,8 @@ const Payments = () => {
         }
       } catch (error) {
         console.error('Error fetching payments:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -98,6 +101,7 @@ const Payments = () => {
         );
 
         if (response.data.success) {
+          setIsLoading(true);
           const updatedResponse = await axios.get(
             `https://api.jewelsamarth.in/api/user/profile-data/${userId}`,
           );
@@ -109,6 +113,7 @@ const Payments = () => {
       console.error('Error saving payment:', error.response?.data || error.message);
     } finally {
       setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -141,6 +146,7 @@ const Payments = () => {
     if (!paymentToDelete) return;
     
     try {
+      setIsLoading(true);
       await axios.delete('https://api.jewelsamarth.in/api/user/payment-delete', {
         data: {
           userId,
@@ -157,6 +163,7 @@ const Payments = () => {
     } finally {
       setDeleteModalOpen(false);
       setPaymentToDelete(null);
+      setIsLoading(false);
     }
   };
 
@@ -164,6 +171,30 @@ const Payments = () => {
     setDeleteModalOpen(false);
     setPaymentToDelete(null);
   };
+
+  // Skeleton Loading Component
+  const PaymentSkeleton = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {[...Array(2)].map((_, index) => (
+        <div key={index} className="border border-gray-200 rounded-[20px] p-5">
+          <div className="animate-pulse">
+            <div className="flex justify-between items-start mb-4">
+              <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+              <div className="flex gap-2">
+                <div className="h-5 w-5 bg-gray-200 rounded-full"></div>
+                <div className="h-5 w-5 bg-gray-200 rounded-full"></div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="h-4 bg-gray-200 rounded w-full"></div>
+              <div className="h-4 bg-gray-200 rounded w-4/5"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-6">
@@ -178,7 +209,9 @@ const Payments = () => {
         </button>
       </div>
 
-      {payments.length === 0 ? (
+      {isLoading ? (
+        <PaymentSkeleton />
+      ) : payments.length === 0 ? (
         <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-[20px]">
           <CreditCard size={48} className="mx-auto text-gray-400 mb-4" />
           <h3 className="text-lg font-medium text-gray-700 mb-2">No Saved Payment Methods</h3>

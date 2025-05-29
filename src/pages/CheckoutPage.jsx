@@ -30,6 +30,20 @@ const CheckoutPage = () => {
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState(false)
 
+  const handleStatusChange = async (orderId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        "https://api.jewelsamarth.in/api/order/change-status",
+        { orderId, status: "cancelled" },
+        { headers: { "x-auth-token": token } }
+      );
+    } catch (err) {
+      console.error("Status update failed:", err);
+    }
+  };
+
+
   // Load Razorpay script
   const loadRazorpay = async () => {
     const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js")
@@ -67,7 +81,7 @@ const CheckoutPage = () => {
       setCartItems(res.data.data)
     } catch (error) {
       console.error("Error fetching cart data:", error)
-      toast.error("Failed to load cart items")
+      // toast.error("Failed to load cart items")
     } finally {
       setLoading(false)
     }
@@ -152,6 +166,7 @@ const CheckoutPage = () => {
 
       const decodedToken = jwtDecode(token)
       const userId = decodedToken.id
+      setUserId(decodedToken.id)
 
       await axios.delete(`https://api.jewelsamarth.in/api/cart/remove/${productId}`, {
         data: { userId }
@@ -194,8 +209,8 @@ const CheckoutPage = () => {
       )
       
       if (res.data.success) {
-        setDiscount(res.data.discount)
-        toast.success(`Coupon applied! ${res.data.discount}% off`)
+        setDiscount(res.data.coupon.discount)
+        toast.success(`Coupon applied! ${res.data.coupon.discount}% off`)
       } else {
         toast.error(res.data.message || "Invalid coupon code")
       }
@@ -378,7 +393,8 @@ const CheckoutPage = () => {
             }
           } catch (error) {
             console.error("Verification error:", error);
-            toast.error("Error verifying payment. Please contact support.");
+            navigate(`/order/${orderResponse.data.order._id}`);
+            // toast.error("Error verifying payment. Please contact support.");
           }
         },
         prefill: {
@@ -393,6 +409,7 @@ const CheckoutPage = () => {
         },
         modal: {
           ondismiss: () => {
+            handleStatusChange(orderResponse.data.order._id);
             toast.warn("Payment window closed. Please complete your payment.");
           },
         },
@@ -401,6 +418,7 @@ const CheckoutPage = () => {
       const rzp1 = new window.Razorpay(options);
 
       rzp1.on("payment.failed", (response) => {
+        handleStatusChange(orderResponse.data.order._id);
         console.error("Payment failed:", response.error);
         toast.error(`Payment failed: ${response.error.description}`);
         navigate(`/order/${orderResponse.data.order._id}?payment=failed`);
