@@ -6,7 +6,7 @@ import { Store, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import GenderCheckBox from '@/components/Admin/GenderCheckBox';
 import ImageUploadPopup from '@/components/Admin/ImageUploadPopup';
 import { Trash } from 'lucide-react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import SizeSelector from '../components/SizeSelector';
 import ProductTags from '../components/ProductTags';
 
@@ -401,17 +401,6 @@ const EditProduct = () => {
                 </div>
             </div>
 
-            <ToastContainer
-                position="bottom-right"
-                autoClose={3000}
-                hideProgressBar
-                newestOnTop
-                closeOnClick
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
         </div>
     );
 };

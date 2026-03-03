@@ -7,8 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import '../assets/styles/AuthTabs.css';
 
@@ -144,19 +143,6 @@ const EmailVerification = () => {
       </div>
       </div>
       </div>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        limit={3}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { motion } from "framer-motion";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
 
@@ -256,18 +256,6 @@ const Collections = ({ productData }) => {
         </button>
       </div>
 
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </div>
   );
 };

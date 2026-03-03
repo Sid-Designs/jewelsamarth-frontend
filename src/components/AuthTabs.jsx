@@ -6,7 +6,7 @@ import { GoArrowLeft } from "react-icons/go";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, useSearchParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import '../assets/styles/AuthTabs.css';
 
 export function AuthTabs({ formData, setFormData, signUp, logIn, defaultActiveTab, isLoading, errorMessage, handleForgetBtn }) {
@@ -192,21 +192,6 @@ export function AuthTabs({ formData, setFormData, signUp, logIn, defaultActiveTa
                 </div>
             </div>
 
-            {/* Toast Notifications */}
-            <ToastContainer
-                stacked
-                position="bottom-right"
-                autoClose={3000}
-                limit={3}
-                hideProgressBar
-                newestOnTop
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
         </>
     );
 }

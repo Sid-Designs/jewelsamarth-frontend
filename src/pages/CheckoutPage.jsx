@@ -6,8 +6,7 @@ import axios from "axios"
 import { VscChevronDown } from "react-icons/vsc"
 import { useNavigate } from "react-router-dom"
 import logo from "../assets/images/JewelSamarth_Single_Logo.png"
-import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { toast } from "react-toastify"
 import { loadScript } from "../assets/utils/razorpay-utils"
 import { FiMinus, FiPlus, FiTrash2, FiShoppingBag, FiCreditCard, FiMapPin, FiCheck } from "react-icons/fi"
 
@@ -63,6 +62,7 @@ const CheckoutPage = () => {
     address: "",
     city: "",
     state: "",
+    email: localStorage.getItem("email") || "",
   })
 
   // Fetch cart data
@@ -361,7 +361,7 @@ const CheckoutPage = () => {
 
       // Razorpay options
       const options = {
-        key: "rzp_test_aimogarTBYbWwl",
+        key: "rzp_test_SAwlMR1sJhESpK",
         amount: Math.round(finalAmt * 100),
         currency: "INR",
         name: "Jewel Samarth",
@@ -772,19 +772,6 @@ const CheckoutPage = () => {
         </div>
       </div>
 
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        limit={3}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </div>
   )
 }

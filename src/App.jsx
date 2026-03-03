@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import PageTransition from '@/components/PageTransition';
 import Home from './pages/Home';
 import Authentication from './pages/Authentication';
@@ -173,6 +175,19 @@ const App = () => {
                 </Routes>
             </AnimatePresence>
             {!noNavbarFooterRoutes.includes(location.pathname) && <Footer />}
+            <ToastContainer
+                position="bottom-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                limit={3}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </>
     );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiTrash2, FiHeart, FiX } from 'react-icons/fi';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 
@@ -176,7 +176,6 @@ const Wishlist = () => {
       </div>
 
       <div className="w-full space-y-4">
-        <ToastContainer position="bottom-right" autoClose={3000} />
 
         {wishlistItems.map((item) => (
           <motion.div

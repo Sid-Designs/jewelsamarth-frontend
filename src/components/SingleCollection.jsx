@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   RotateCw,
   CircleHelp,
@@ -852,19 +852,6 @@ const SingleCollection = () => {
         </div>
       </div>
 
-      <ToastContainer
-        stacked
-        position="bottom-right"
-        autoClose={3000}
-        limit={3}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </div>
   );
 };

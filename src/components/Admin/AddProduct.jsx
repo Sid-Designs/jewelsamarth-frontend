@@ -4,7 +4,7 @@ import { Store, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import GenderCheckBox from '@/components/Admin/GenderCheckBox';
 import ImageUploadPopup from '@/components/Admin/ImageUploadPopup';
 import { Trash } from 'lucide-react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import SizeSelector from '../SizeSelector';
 import ProductTags from '../ProductTags';
 
@@ -336,20 +336,6 @@ const AddProduct = () => {
           <ProductTags selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
         </div>
       </div>
-      <ToastContainer
-        stacked
-        position="bottom-right"
-        autoClose={3000}
-        limit={3}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </div>
   );
 };

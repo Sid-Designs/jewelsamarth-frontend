@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { toast, ToastContainer } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify"
 import { Helmet } from 'react-helmet';
 import Navbar from '../components/Navbar';
 import Carousel from '../components/Carousel';
@@ -35,19 +34,6 @@ const Home = () => {
             <BestCollection />
             <ShopForCollection />
             <CustomerStories />
-            <ToastContainer
-                position="bottom-right"
-                autoClose={3000}
-                limit={3}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
         </>
     );
 };

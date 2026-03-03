@@ -2,8 +2,7 @@ import { useEffect, useState } from "react"
 import jwtDecode from "jwt-decode"
 import "../assets/styles/Cart.css"
 import axios from "axios"
-import { toast, ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import { FiTrash2, FiPlus, FiMinus } from "react-icons/fi"
 
@@ -327,19 +326,6 @@ const Cart = () => {
                     </>
                 )}
             </div>
-            <ToastContainer
-                position="bottom-right"
-                autoClose={3000}
-                limit={3}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
         </>
     )
 }

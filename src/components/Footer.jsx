@@ -3,7 +3,7 @@ import '../assets/styles/Footer.css';
 import logo from '../assets/images/Jewel_Samarth_Logo.png';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 
 
 const Footer = () => {
@@ -102,19 +102,6 @@ const Footer = () => {
           </ul>
         </div>
       </footer>
-      <ToastContainer
-        stacked
-        position="bottom-right"
-        autoClose={3000}
-        limit={3}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </>
   );
 };

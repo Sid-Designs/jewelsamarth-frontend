@@ -15,7 +15,7 @@ import { PiSealQuestionFill } from "react-icons/pi";
 import gsap from 'gsap'
 import MenuBar from './MenuBar';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import { AuthTabs } from './AuthTabs';
 import jwtDecode from 'jwt-decode';
